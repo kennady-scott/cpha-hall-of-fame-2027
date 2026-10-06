@@ -10,6 +10,7 @@
 <style>
 /* Layout: single dark gala sheet in deep harbor teal, built from the CPhA logo colors (teal, lime, orange), with an A/B switch.
    A = big shimmering 30th with a mortar-and-pestle 0, logo beside the Tickets & Sponsorships intro.  B = logo medallion hero.
+   C = A with invitation wording: CPhA 30th Anniversary / You are invited to / The Hall of Fame Anniversary Dinner.
    Token names are roles: --lime = labels/rules, --teal = highlights, --orange = action. */
 :root{
   --night:#0c2227;
@@ -34,7 +35,8 @@
 body{transition:background-color .4s ease}
 /* which hero pieces belong to which look */
 :root[data-look="b"] [data-looks]:not([data-looks~="b"]),
-:root[data-look="a"] [data-looks]:not([data-looks~="a"]){display:none!important}
+:root[data-look="a"] [data-looks]:not([data-looks~="a"]),
+:root[data-look="c"] [data-looks]:not([data-looks~="c"]){display:none!important}
 
 /* A/B switcher */
 .ab{position:fixed;top:calc(14px + env(safe-area-inset-top,0px));right:14px;z-index:20;display:flex;align-items:center;gap:4px;
@@ -68,8 +70,8 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;margin:0
 .thirty sup{font-size:.28em;font-style:normal;font-weight:500;vertical-align:.9em;letter-spacing:0;margin-left:.24em}
 /* mortar & pestle "0" — part of look A */
 .zero-mortar{display:none;width:.64em;height:.8em;vertical-align:-.02em;overflow:visible;margin-left:.02em}
-:root[data-look="a"] .zero-type{display:none}
-:root[data-look="a"] .zero-mortar{display:inline-block}
+:root:not([data-look="b"]) .zero-type{display:none}
+:root:not([data-look="b"]) .zero-mortar{display:inline-block}
 .zero-mortar .ring-a{stop-color:var(--lime)}
 .zero-mortar .ring-b{stop-color:var(--teal)}
 .zero-mortar .pestle{fill:var(--orange)}
@@ -81,6 +83,8 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;margin:0
 @keyframes rise{from{transform:translateY(16px) scale(.96);opacity:.4}to{transform:none;opacity:1}}
 .hero h1{font-size:clamp(1.9rem,5vw,3.4rem);line-height:1.1;max-width:18ch}
 .hero h1 em{color:var(--teal)}
+.anniv{font-family:var(--f-display);font-size:clamp(1rem,2.6vw,1.5rem);letter-spacing:.42em;text-transform:uppercase;color:var(--teal);margin:-18px 0 0;padding-left:.42em}
+.invite{display:block;font-style:italic;font-weight:400;font-size:.5em;color:var(--mist);margin-bottom:.35em;letter-spacing:.01em}
 .facts{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 28px;font-size:1.05rem;color:var(--pearl)}
 .facts span{display:flex;align-items:center;gap:10px}
 .facts span+span::before{content:"";width:5px;height:5px;transform:rotate(45deg);background:var(--lime);margin-right:18px}
@@ -177,14 +181,15 @@ footer .seal{display:block;margin-bottom:8px}
   <span>Look</span>
   <button type="button" id="look-a" data-look="a" aria-pressed="true">A</button>
   <button type="button" id="look-b" data-look="b" aria-pressed="false">B</button>
+  <button type="button" id="look-c" data-look="c" aria-pressed="false">C</button>
 </div>
 
 <header class="hero">
   <span class="corner-logo" role="img" aria-label="CPhA Hall of Fame, 30 Years"></span>
   <canvas id="bubbles" aria-hidden="true"></canvas>
   <div class="wrap hero-inner">
-    <div class="logo-slot" data-looks="a"><span class="seal">California Pharmacists Association</span></div>
-    <p class="thirty" data-looks="a" aria-label="30th">3<span class="zero-type">0</span><svg class="zero-mortar" viewBox="0 0 64 80" aria-hidden="true">
+    <div class="logo-slot" data-looks="a c"><span class="seal">California Pharmacists Association</span></div>
+    <p class="thirty" data-looks="a c" aria-label="30th">3<span class="zero-type">0</span><svg class="zero-mortar" viewBox="0 0 64 80" aria-hidden="true">
       <defs><linearGradient id="ring-grad" x1="0" y1="0" x2="1" y2="1"><stop class="ring-b" offset="0"/><stop class="ring-a" offset="1"/></linearGradient></defs>
       <g class="pestle" transform="rotate(28 33 50)">
         <rect x="30" y="-12" width="6" height="60" rx="3"/>
@@ -195,8 +200,9 @@ footer .seal{display:block;margin-bottom:8px}
         <path fill="url(#ring-grad)" d="M19 74h24l5 6H14z"/>
       </g>
     </svg><sup>th</sup></p>
+    <p class="anniv" data-looks="c">Anniversary</p>
     <div class="medallion" data-looks="b"><div class="logo-art" role="img" aria-label="CPhA Hall of Fame, 30 Years"></div></div>
-    <h1><span data-looks="a">The Hall of Fame <em>Anniversary</em> Dinner</span><span data-looks="b">The 30th Anniversary <em>Hall of Fame</em> Dinner</span></h1>
+    <h1><span data-looks="a">The Hall of Fame <em>Anniversary</em> Dinner</span><span data-looks="c"><span class="invite">You are invited to</span>The Hall of Fame <em>Anniversary</em> Dinner</span><span data-looks="b">The 30th Anniversary <em>Hall of Fame</em> Dinner</span></h1>
     <div class="facts">
       <span>Friday, April 23, 2027</span>
       <span>San Diego, California</span>
@@ -223,7 +229,7 @@ footer .seal{display:block;margin-bottom:8px}
         <p>Every seat and every sponsorship supports the Hall of Fame and the people who carry the profession forward. Choose how you want to be part of the evening.</p>
         <p class="tip">On the registration form, enter a quantity next to each ticket or sponsorship you want, then pay online.</p>
       </div>
-      <div class="intro-logo" data-looks="a"><div class="logo-art" role="img" aria-label="CPhA Hall of Fame, 30 Years"></div></div>
+      <div class="intro-logo" data-looks="a c"><div class="logo-art" role="img" aria-label="CPhA Hall of Fame, 30 Years"></div></div>
       </div>
 
       <article class="marquee">
@@ -313,7 +319,7 @@ footer .seal{display:block;margin-bottom:8px}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
-// A/B look switcher (#a or #b in the link picks one)
+// A/B/C look switcher (#a, #b or #c in the link picks one)
 (function(){
   const root = document.documentElement;
   function set(look, save){
@@ -324,8 +330,8 @@ footer .seal{display:block;margin-bottom:8px}
   let start = 'a';
   try { start = localStorage.getItem('hof-look-v2') || 'a'; } catch (e) {}
   const h = location.hash.slice(1).toLowerCase();
-  if (h === 'a' || h === 'b') start = h;
-  set(start === 'b' ? 'b' : 'a');
+  if (['a','b','c'].includes(h)) start = h;
+  set(['a','b','c'].includes(start) ? start : 'a');
   document.querySelectorAll('.ab button[data-look]').forEach(b => b.addEventListener('click', () => set(b.dataset.look, true)));
 })();
 
