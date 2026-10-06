@@ -8,31 +8,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..700&family=Jost:wght@300;400;500;600&display=swap">
 <style>
-/* Layout: single dark gala sheet, two looks behind an A/B switch.
-   A = C's composition in B's colors, a mortar-and-pestle 0 in the 30th, logo beside the Tickets & Sponsorships intro.  B = harbor teal + CPhA logo colors (logo medallion).
-   C = Pacific night + champagne gold + coral (big shimmering 30).
+/* Layout: single dark gala sheet in deep harbor teal, built from the CPhA logo colors (teal, lime, orange), with an A/B switch.
+   A = big shimmering 30th with a mortar-and-pestle 0, logo beside the Tickets & Sponsorships intro.  B = logo medallion hero.
    Token names are roles: --lime = labels/rules, --teal = highlights, --orange = action. */
 :root{
-  --night:#0b1a2b;
-  --night-2:#11243a;
-  --line:#2a4058;
-  --pearl:#f3ece0;
-  --mist:#a9b6c4;
-  --lime:#d9b46a;
-  --teal:#f4dca0;
-  --orange:#ff7a59;
-  --orange-ink:#1a0d08;
-  --glow:#1d3a55;
-  --tier-hover:#15304b;
-  --feature:#1a3350;
-  --sticky-bg:rgba(11,26,43,.94);
-  --btn-glow:rgba(255,122,89,.6);
-  --marquee-wash:rgba(217,180,106,.16);
-  --f-display:"Bodoni Moda","Didot","Bodoni 72",Georgia,serif;
-  --f-body:"Jost","Futura","Avenir Next","Century Gothic",system-ui,sans-serif;
-  color-scheme:dark;
-}
-:root[data-look="b"],:root[data-look="a"]{
   --night:#0c2227;
   --night-2:#112e35;
   --line:#24474f;
@@ -48,13 +27,14 @@
   --sticky-bg:rgba(12,34,39,.94);
   --btn-glow:rgba(231,142,66,.6);
   --marquee-wash:rgba(162,200,85,.14);
+  --f-display:"Bodoni Moda","Didot","Bodoni 72",Georgia,serif;
+  --f-body:"Jost","Futura","Avenir Next","Century Gothic",system-ui,sans-serif;
+  color-scheme:dark;
 }
 body{transition:background-color .4s ease}
 /* which hero pieces belong to which look */
-:root[data-look="c"] [data-looks]:not([data-looks~="c"]),
 :root[data-look="b"] [data-looks]:not([data-looks~="b"]),
 :root[data-look="a"] [data-looks]:not([data-looks~="a"]){display:none!important}
-:root[data-look="a"] .thirty{background-image:linear-gradient(100deg,var(--lime) 0%,var(--teal) 35%,#ffffff 50%,var(--teal) 65%,var(--lime) 100%)}
 
 /* A/B switcher */
 .ab{position:fixed;top:calc(14px + env(safe-area-inset-top,0px));right:14px;z-index:20;display:flex;align-items:center;gap:4px;
@@ -79,7 +59,7 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;margin:0
 .logo-slot{display:grid;place-items:center;gap:6px}
 .thirty{font-family:var(--f-display);font-weight:800;font-style:italic;line-height:.8;
   font-size:clamp(9rem,30vw,19rem);letter-spacing:-.04em;margin:0;
-  background:linear-gradient(100deg,var(--lime) 0%,var(--teal) 35%,#fff7e3 50%,var(--teal) 65%,var(--lime) 100%);
+  background:linear-gradient(100deg,var(--lime) 0%,var(--teal) 35%,#ffffff 50%,var(--teal) 65%,var(--lime) 100%);
   background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
   animation:sheen 6s ease-in-out infinite}
 @keyframes sheen{0%,100%{background-position:100% 0}50%{background-position:0 0}}
@@ -193,14 +173,13 @@ footer .seal{display:block;margin-bottom:8px}
   <span>Look</span>
   <button type="button" id="look-a" data-look="a" aria-pressed="true">A</button>
   <button type="button" id="look-b" data-look="b" aria-pressed="false">B</button>
-  <button type="button" id="look-c" data-look="c" aria-pressed="false">C</button>
 </div>
 
 <header class="hero">
   <canvas id="bubbles" aria-hidden="true"></canvas>
   <div class="wrap hero-inner">
-    <div class="logo-slot" data-looks="a c"><span class="seal">California Pharmacists Association</span></div>
-    <p class="thirty" data-looks="a c" aria-label="30th">3<span class="zero-type">0</span><svg class="zero-mortar" viewBox="0 0 64 80" aria-hidden="true">
+    <div class="logo-slot" data-looks="a"><span class="seal">California Pharmacists Association</span></div>
+    <p class="thirty" data-looks="a" aria-label="30th">3<span class="zero-type">0</span><svg class="zero-mortar" viewBox="0 0 64 80" aria-hidden="true">
       <defs><linearGradient id="ring-grad" x1="0" y1="0" x2="1" y2="1"><stop class="ring-b" offset="0"/><stop class="ring-a" offset="1"/></linearGradient></defs>
       <g class="pestle" transform="rotate(28 33 50)">
         <rect x="30" y="-12" width="6" height="60" rx="3"/>
@@ -212,7 +191,7 @@ footer .seal{display:block;margin-bottom:8px}
       </g>
     </svg><sup>th</sup></p>
     <div class="medallion" data-looks="b"><div class="logo-art" role="img" aria-label="CPhA Hall of Fame, 30 Years"></div></div>
-    <h1><span data-looks="a c">The Hall of Fame <em>Anniversary</em> Dinner</span><span data-looks="b">The 30th Anniversary <em>Hall of Fame</em> Dinner</span></h1>
+    <h1><span data-looks="a">The Hall of Fame <em>Anniversary</em> Dinner</span><span data-looks="b">The 30th Anniversary <em>Hall of Fame</em> Dinner</span></h1>
     <div class="facts">
       <span>Friday, April 23, 2027</span>
       <span>San Diego, California</span>
@@ -329,7 +308,7 @@ footer .seal{display:block;margin-bottom:8px}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
-// A/B/C look switcher (#a, #b or #c in the link picks one)
+// A/B look switcher (#a or #b in the link picks one)
 (function(){
   const root = document.documentElement;
   function set(look, save){
@@ -340,8 +319,8 @@ footer .seal{display:block;margin-bottom:8px}
   let start = 'a';
   try { start = localStorage.getItem('hof-look-v2') || 'a'; } catch (e) {}
   const h = location.hash.slice(1).toLowerCase();
-  if (['a','b','c'].includes(h)) start = h;
-  set(['a','b','c'].includes(start) ? start : 'a');
+  if (h === 'a' || h === 'b') start = h;
+  set(start === 'b' ? 'b' : 'a');
   document.querySelectorAll('.ab button[data-look]').forEach(b => b.addEventListener('click', () => set(b.dataset.look, true)));
 })();
 
@@ -362,7 +341,7 @@ try {
   });
 } catch (e) {}
 
-// rising bubbles (pale teal/lime in A, confetti in B, champagne gold in C)
+// rising bubbles (pale teal/lime in A, confetti in B)
 (function(){
   const c = document.getElementById('bubbles');
   if (!c || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -392,7 +371,7 @@ try {
       const fade = Math.min(1, b.y / (h * .35));
       ctx.beginPath(); ctx.arc(x, b.y, b.r, 0, Math.PI * 2);
       const look = document.documentElement.dataset.look;
-      const pal = look === 'b' ? ['#8fd2d8','#a2c855','#e78e42','#ffffff'] : look === 'a' ? ['#bfe6ea','#d6ea9e','#ffffff'] : ['#f4dca0','#f4dca0','#fff3d6'];
+      const pal = look === 'b' ? ['#8fd2d8','#a2c855','#e78e42','#ffffff'] : ['#bfe6ea','#d6ea9e','#ffffff'];
       ctx.globalAlpha = b.a * fade; ctx.fillStyle = pal[Math.floor(b.k * pal.length)]; ctx.fill();
       if (b.y < -10) Object.assign(b, make());
     }

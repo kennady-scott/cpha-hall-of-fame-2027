@@ -8,17 +8,13 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..700&family=Jost:wght@300;400;500;600&display=swap">
 <style>
-/* Layout: same gala sheet as the landing page. Two columns: steps (tickets, details) left, sticky order summary right. Looks follow the landing page's A/B/C choice. */
+/* Layout: same gala sheet as the landing page. Two columns: steps (tickets, details) left, sticky order summary right. */
 :root{
   --night:#0c2227; --night-2:#112e35; --line:#24474f; --pearl:#f4f6f0; --mist:#a3bcbf;
   --lime:#a2c855; --teal:#8fd2d8; --orange:#e78e42; --orange-ink:#1d0f04; --field:#0a1d21;
   --f-display:"Bodoni Moda","Didot","Bodoni 72",Georgia,serif;
   --f-body:"Jost","Futura","Avenir Next","Century Gothic",system-ui,sans-serif;
   color-scheme:dark;
-}
-:root[data-look="c"]{
-  --night:#0b1a2b; --night-2:#11243a; --line:#2a4058; --pearl:#f3ece0; --mist:#a9b6c4;
-  --lime:#d9b46a; --teal:#f4dca0; --orange:#ff7a59; --orange-ink:#1a0d08; --field:#09172a;
 }
 *{box-sizing:border-box}
 html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -172,9 +168,6 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;margin:0
 
 <script>
 (function(){
-  // carry over the look chosen on the landing page
-  try { const l = localStorage.getItem('hof-look-v2'); if (l === 'b' || l === 'c') document.documentElement.dataset.look = l; } catch (e) {}
-
   const TIERS = [
     { id:'presenting', name:'Presenting Sponsor', price:5000, max:1, flag:'Only one available', desc:'Name recognition throughout the entire event.' },
     { id:'gold', name:'Gold Sponsor', price:2500, desc:'Corporate or family. Includes tickets to use or donate to a student or faculty member.' },
