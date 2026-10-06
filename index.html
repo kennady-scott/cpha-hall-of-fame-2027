@@ -111,44 +111,76 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;margin:0
 .ic-rule{width:64px;height:1px;background:var(--mist);opacity:.55}
 .ic-date{letter-spacing:.24em;text-transform:uppercase;font-size:clamp(.7rem,1.6vw,.88rem);line-height:2.1;margin:0;padding-left:.24em}
 
-/* D: the sealed envelope */
-.envelope-stage{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:24px 16px;
-  background:radial-gradient(80% 60% at 50% 42%,#1d1d21 0%,#070708 72%);transition:opacity .7s ease}
+/* B: the sealed envelope. Stages: s1 seal breaks, s2 flap opens, s3 card slides out while the envelope drops, s4 card comes forward */
+.envelope-stage{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:24px 16px;overflow:hidden;
+  background:radial-gradient(80% 60% at 50% 45%,#1d1d21 0%,#070708 72%);transition:opacity .6s ease}
 .envelope-stage.reveal{opacity:0;pointer-events:none}
 .envelope-stage.done{display:none!important}
 :root[data-look="b"]:has(.envelope-stage:not(.done)) body{overflow:hidden}
-.env-wrap{display:grid;gap:22px;padding-top:min(18vh,140px);justify-items:center;text-align:center}
-.env-kicker{font-family:var(--f-display);letter-spacing:.32em;text-transform:uppercase;font-size:.74rem;color:#aaa59b;margin:0;padding-left:.32em}
-.env-hint{margin:0;font-size:.82rem;letter-spacing:.2em;text-transform:uppercase;color:#aaa59b;transition:opacity .3s}
-.envelope-stage.open .env-hint{opacity:0}
-.envelope{position:relative;display:block;width:min(520px,86vw);aspect-ratio:1.55;border:0;padding:0;background:none;cursor:pointer;perspective:1400px;font:inherit}
+.env-wrap{display:grid;gap:20px;justify-items:center;text-align:center}
+.env-kicker,.env-hint{margin:0;color:#aaa59b;transition:opacity .4s ease}
+.env-kicker{font-family:var(--f-display);letter-spacing:.32em;text-transform:uppercase;font-size:.74rem;padding-left:.32em}
+.env-hint{font-size:.8rem;letter-spacing:.22em;text-transform:uppercase}
+.envelope-stage.s1 .env-kicker,.envelope-stage.s1 .env-hint{opacity:0}
+.envelope{position:relative;display:block;width:min(480px,86vw,62vh);aspect-ratio:1.5;border:0;padding:0;background:none;cursor:pointer;perspective:1600px;font:inherit;color:inherit}
 .envelope:focus-visible{outline:2px solid #8fd2d8;outline-offset:10px}
 .envelope > span{position:absolute;display:block}
-.env-back{inset:0;background:#19191c;border-radius:4px;box-shadow:0 40px 90px -24px rgba(0,0,0,.9)}
-.env-card{left:5%;right:5%;top:6%;bottom:6%;z-index:1;background:#f6f1e7;color:#151515;border-radius:2px;
-  box-shadow:inset 0 0 0 7px #f6f1e7,inset 0 0 0 8px rgba(21,21,21,.3);
-  display:grid;align-content:center;justify-items:center;gap:.35em;padding:0 6%;
-  transition:transform 1.1s cubic-bezier(.2,.8,.2,1) .95s}
-.env-card span{display:block}
-.ec-small{font-family:var(--f-display);font-style:italic;font-size:clamp(.8rem,2.6vw,1.05rem);color:#555}
-.ec-big{font-family:var(--f-display);font-size:clamp(1.5rem,6vw,2.4rem);line-height:1}
-.ec-it{font-family:var(--f-display);font-style:italic;font-size:clamp(.85rem,3vw,1.2rem);color:#2f7f86}
-.ec-date{font-size:clamp(.55rem,1.8vw,.72rem);letter-spacing:.24em;text-transform:uppercase;margin-top:.4em;color:#444}
-.env-front{inset:0;z-index:2;border-radius:4px;background:linear-gradient(160deg,#222226,#121214);
+.env-back,.env-liner,.env-front,.env-flap,.env-seal{transition:transform .9s cubic-bezier(.5,0,.3,1),opacity .6s ease}
+.env-back{inset:0;z-index:1;background:#1a1a1d;border-radius:4px;box-shadow:0 40px 90px -24px rgba(0,0,0,.9)}
+.env-liner{left:0;right:0;top:0;height:58%;z-index:2;clip-path:polygon(0 0,100% 0,50% 100%);
+  background:repeating-linear-gradient(135deg,#2f7f86 0 10px,#2a737a 10px 20px)}
+.env-front{inset:0;z-index:4;border-radius:4px;background:linear-gradient(160deg,#232327,#121214);
   clip-path:polygon(0 0,50% 54%,100% 0,100% 100%,0 100%)}
-.env-flap{left:0;right:0;top:0;height:58%;z-index:3;transform-origin:top;
-  background:linear-gradient(180deg,#26262a,#1a1a1d);clip-path:polygon(0 0,100% 0,50% 100%);
-  transition:transform .75s ease .3s,z-index 0s .7s}
-.env-seal{left:50%;top:58%;width:70px;height:70px;margin:-35px 0 0 -35px;z-index:4;
+.env-flap{left:0;right:0;top:0;height:58%;z-index:5;transform-origin:top center;transform-style:preserve-3d;
+  transition:transform .8s cubic-bezier(.4,0,.2,1),z-index 0s .45s}
+.env-flap i{position:absolute;inset:0;clip-path:polygon(0 0,100% 0,50% 100%);backface-visibility:hidden}
+.flap-out{background:linear-gradient(180deg,#28282c,#1b1b1e)}
+.flap-in{transform:rotateX(180deg);background:repeating-linear-gradient(135deg,#2f7f86 0 10px,#2a737a 10px 20px)}
+.env-seal{left:50%;top:58%;width:68px;height:68px;margin:-34px 0 0 -34px;z-index:6;
   border-radius:47% 53% 50% 50%/52% 48% 52% 48%;
   background:radial-gradient(circle at 35% 30%,#7cc3c9 0%,#2f7f86 55%,#1d585e 100%);
   box-shadow:0 5px 12px rgba(0,0,0,.55),inset 0 0 0 5px rgba(255,255,255,.07),inset 0 -4px 8px rgba(0,0,0,.25);
-  display:grid!important;place-items:center;transition:transform .45s ease,opacity .45s ease}
-.env-seal i{font-family:var(--f-display);font-style:italic;font-weight:800;font-size:1.7rem;color:rgba(255,255,255,.78);text-shadow:0 -1px 0 rgba(0,0,0,.35)}
-.envelope-stage.open .env-seal{transform:scale(1.35);opacity:0}
-.envelope-stage.open .env-flap{transform:rotateX(180deg);z-index:0}
-.envelope-stage.open .env-card{transform:translateY(-44%)}
-.envelope-stage.reveal .env-card{transform:translateY(-44%) scale(1.08)}
+  display:grid!important;place-items:center}
+.env-seal b{font-family:var(--f-display);font-style:italic;font-weight:800;font-size:1.6rem;color:rgba(255,255,255,.8);text-shadow:0 -1px 0 rgba(0,0,0,.35)}
+
+/* the card itself (lives inside the envelope, sized with container units) */
+.env-card{left:4%;right:4%;top:5%;height:90%;z-index:3;container-type:inline-size;
+  background:#f7f2e8;color:#151515;border-radius:3px;
+  box-shadow:inset 0 0 0 2.2cqw #f7f2e8,inset 0 0 0 calc(2.2cqw + 1px) rgba(21,21,21,.45),inset 0 0 0 calc(2.9cqw + 1px) #f7f2e8,inset 0 0 0 calc(2.9cqw + 2px) rgba(21,21,21,.2),0 18px 40px -12px rgba(0,0,0,.6);
+  display:grid!important;grid-template-columns:44% 56%;align-items:center;padding:0 5cqw 0 3cqw;
+  transition:transform 1.25s cubic-bezier(.3,.1,.2,1)}
+.env-card > span{display:grid;justify-items:center;text-align:center;min-width:0}
+.card-thirty{font-family:var(--f-display);font-weight:800;font-style:italic;line-height:.8;font-size:27cqw;letter-spacing:-.04em;white-space:nowrap;
+  background:linear-gradient(100deg,#6f9e2f 0%,#2d8a93 40%,#7cc6cc 50%,#2d8a93 60%,#6f9e2f 100%);background-size:250% 100%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;animation:sheen 6s ease-in-out infinite}
+.card-thirty svg{width:.64em;height:.8em;vertical-align:-.02em;overflow:visible;margin-left:.02em}
+.card-thirty .pestle{fill:#e07b2c}
+.card-thirty sup{font-size:.28em;font-style:normal;font-weight:500;vertical-align:.9em;letter-spacing:0;margin-left:.2em}
+.card-anniv{font-family:var(--f-display);font-size:3.1cqw;letter-spacing:.42em;text-transform:uppercase;color:#2d8a93;margin-top:1.6cqw;padding-left:.42em}
+.card-house{font-size:2cqw;letter-spacing:.24em;text-transform:uppercase;color:#555;padding-left:.24em}
+.card-inv{font-family:var(--f-display);font-style:italic;font-size:3.6cqw;color:#666;margin-top:2.4cqw}
+.card-title{font-family:var(--f-display);font-size:6.6cqw;line-height:1.02;margin-top:.8cqw;text-wrap:balance}
+.card-title em{display:block;color:#2d8a93;font-size:.8em}
+.card-rule{width:9cqw;height:1px;background:#151515;opacity:.35;margin:2.6cqw 0 2.2cqw}
+.card-when{font-size:2.1cqw;letter-spacing:.2em;text-transform:uppercase;line-height:1.9;color:#333;padding-left:.2em}
+
+.env-continue{position:fixed;left:50%;bottom:calc(28px + env(safe-area-inset-bottom,0px));transform:translate(-50%,12px);z-index:8;
+  opacity:0;pointer-events:none;transition:opacity .5s ease .2s,transform .5s ease .2s;
+  border:1px solid rgba(243,238,228,.5);background:rgba(13,13,14,.6);color:#f3eee4;border-radius:999px;padding:13px 26px;
+  font:inherit;font-size:.82rem;letter-spacing:.18em;text-transform:uppercase;cursor:pointer}
+.env-continue:hover{background:#f3eee4;color:#0d0d0e}
+.env-continue:focus-visible{outline:2px solid #8fd2d8;outline-offset:3px}
+
+.envelope-stage.s1 .env-seal{transform:scale(1.3) rotate(14deg);opacity:0;transition-duration:.35s}
+.envelope-stage.s2 .env-flap{transform:rotateX(180deg);z-index:2}
+.envelope-stage.s3 .env-back,.envelope-stage.s3 .env-liner,.envelope-stage.s3 .env-front,.envelope-stage.s3 .env-flap{transform:translateY(46%)}
+.envelope-stage.s3 .env-flap{transform:translateY(46%) rotateX(180deg)}
+.envelope-stage.s3 .env-card{transform:translateY(-60%)}
+.envelope-stage.s4 .env-back,.envelope-stage.s4 .env-liner,.envelope-stage.s4 .env-front{transform:translateY(120%);opacity:0}
+.envelope-stage.s4 .env-flap{transform:translateY(120%) rotateX(180deg);opacity:0}
+.envelope-stage.s4 .env-card{z-index:7;transform:translateY(0) scale(var(--land,1.4))}
+.envelope-stage.s4 .env-continue{opacity:1;pointer-events:auto;transform:translate(-50%,0)}
+.envelope-stage.s4 .envelope{cursor:default}
 .anniv{font-family:var(--f-display);font-size:clamp(1rem,2.6vw,1.5rem);letter-spacing:.42em;text-transform:uppercase;color:var(--teal);margin:-18px 0 0;padding-left:.42em}
 .invite{display:block;font-style:italic;font-weight:400;font-size:.5em;color:var(--mist);margin-bottom:.35em;letter-spacing:.01em}
 .facts{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 28px;font-size:1.05rem;color:var(--pearl)}
@@ -256,13 +288,31 @@ footer .seal{display:block;margin-bottom:8px}
     <p class="env-kicker">California Pharmacists Association</p>
     <button type="button" class="envelope" id="env-open" aria-label="Open the invitation">
       <span class="env-back"></span>
-      <span class="env-card"><span class="ec-small">You are cordially invited</span><span class="ec-big">Hall of Fame</span><span class="ec-it">30th Anniversary Dinner</span><span class="ec-date">April 23, 2027 · San Diego</span></span>
+      <span class="env-liner"></span>
+      <span class="env-card">
+        <span>
+          <span class="card-thirty" aria-label="30th">3<svg viewBox="0 0 64 80" aria-hidden="true">
+            <defs><linearGradient id="ring-grad-card" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2d8a93"/><stop offset="1" stop-color="#6f9e2f"/></linearGradient></defs>
+            <g class="pestle" transform="rotate(28 33 50)"><rect x="30" y="-12" width="6" height="60" rx="3"/><ellipse cx="33" cy="54" rx="7.5" ry="9"/></g>
+            <g transform="skewX(-9) translate(9 0)"><path fill="url(#ring-grad-card)" fill-rule="evenodd" d="M31 4a24 36 0 1 0 0.01 0zM31 9a12 31 0 1 1 -0.01 0z"/><path fill="url(#ring-grad-card)" d="M19 74h24l5 6H14z"/></g>
+          </svg><sup>th</sup></span>
+          <span class="card-anniv">Anniversary</span>
+        </span>
+        <span>
+          <span class="card-house">California Pharmacists Association</span>
+          <span class="card-inv">You are invited to</span>
+          <span class="card-title">The Hall of Fame <em>Anniversary Dinner</em></span>
+          <span class="card-rule"></span>
+          <span class="card-when">Friday · April 23, 2027<br>San Diego, California</span>
+        </span>
+      </span>
       <span class="env-front"></span>
-      <span class="env-flap"></span>
-      <span class="env-seal"><i>30</i></span>
+      <span class="env-flap"><i class="flap-out"></i><i class="flap-in"></i></span>
+      <span class="env-seal"><b>30</b></span>
     </button>
     <p class="env-hint">Tap to open</p>
   </div>
+  <button type="button" class="env-continue" id="env-continue">View the evening ↓</button>
 </div>
 
 <header class="hero">
@@ -412,15 +462,31 @@ footer .seal{display:block;margin-bottom:8px}
   const root = document.documentElement;
   const env = document.getElementById('env');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function openEnvelope(){
-    if (env.classList.contains('open')) return;
-    env.classList.add('open');
-    setTimeout(() => env.classList.add('reveal'), reduce ? 0 : 2300);
-    setTimeout(() => env.classList.add('done'), reduce ? 0 : 3000);
+  const STAGES = ['s1', 's2', 's3', 's4'];
+  let timers = [];
+  function landScale(){
+    const card = env.querySelector('.env-card');
+    const w = card.offsetWidth, h = card.offsetHeight;
+    return Math.max(1, Math.min(1.55, (innerWidth - 32) / w, (innerHeight * 0.78) / h));
   }
-  env.addEventListener('click', e => { if (!e.target.closest('.ab')) openEnvelope(); });
+  function openEnvelope(){
+    if (env.classList.contains('s1')) return;
+    env.style.setProperty('--land', landScale().toFixed(3));
+    const at = reduce ? [0, 0, 0, 0] : [0, 380, 1150, 2450];
+    STAGES.forEach((st, i) => timers.push(setTimeout(() => env.classList.add(st), at[i])));
+    timers.push(setTimeout(() => document.getElementById('env-continue').focus({ preventScroll: true }), reduce ? 0 : 3000));
+  }
+  function closeEnvelope(){
+    env.classList.add('reveal');
+    setTimeout(() => env.classList.add('done'), reduce ? 0 : 650);
+  }
+  env.addEventListener('click', e => {
+    if (e.target.closest('.ab')) return;
+    if (env.classList.contains('s4')) closeEnvelope(); else openEnvelope();
+  });
+  addEventListener('resize', () => { if (env.classList.contains('s1')) env.style.setProperty('--land', landScale().toFixed(3)); });
   function set(look, save){
-    if (look === 'b' && root.dataset.look !== 'b') env.classList.remove('open', 'reveal', 'done');
+    if (look === 'b' && root.dataset.look !== 'b') { timers.forEach(clearTimeout); timers = []; env.classList.remove(...STAGES, 'reveal', 'done'); }
     root.dataset.look = look;
     document.querySelectorAll('.ab button[data-look]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.look === look)));
     if (save) { try { localStorage.setItem('hof-look-v3', look); } catch (e) {} }
