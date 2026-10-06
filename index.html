@@ -117,7 +117,7 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;margin:0
 .envelope-stage.reveal{opacity:0;pointer-events:none}
 .envelope-stage.done{display:none!important}
 :root[data-look="d"]:has(.envelope-stage:not(.done)) body{overflow:hidden}
-.env-wrap{display:grid;gap:22px;justify-items:center;text-align:center}
+.env-wrap{display:grid;gap:22px;padding-top:min(18vh,140px);justify-items:center;text-align:center}
 .env-kicker{font-family:var(--f-display);letter-spacing:.32em;text-transform:uppercase;font-size:.74rem;color:#aaa59b;margin:0;padding-left:.32em}
 .env-hint{margin:0;font-size:.82rem;letter-spacing:.2em;text-transform:uppercase;color:#aaa59b;transition:opacity .3s}
 .envelope-stage.open .env-hint{opacity:0}
@@ -147,8 +147,8 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;margin:0
 .env-seal i{font-family:var(--f-display);font-style:italic;font-weight:800;font-size:1.7rem;color:rgba(255,255,255,.78);text-shadow:0 -1px 0 rgba(0,0,0,.35)}
 .envelope-stage.open .env-seal{transform:scale(1.35);opacity:0}
 .envelope-stage.open .env-flap{transform:rotateX(180deg);z-index:0}
-.envelope-stage.open .env-card{transform:translateY(-58%)}
-.envelope-stage.reveal .env-card{transform:translateY(-58%) scale(1.12)}
+.envelope-stage.open .env-card{transform:translateY(-44%)}
+.envelope-stage.reveal .env-card{transform:translateY(-44%) scale(1.08)}
 .anniv{font-family:var(--f-display);font-size:clamp(1rem,2.6vw,1.5rem);letter-spacing:.42em;text-transform:uppercase;color:var(--teal);margin:-18px 0 0;padding-left:.42em}
 .invite{display:block;font-style:italic;font-weight:400;font-size:.5em;color:var(--mist);margin-bottom:.35em;letter-spacing:.01em}
 .facts{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 28px;font-size:1.05rem;color:var(--pearl)}
@@ -262,7 +262,7 @@ footer .seal{display:block;margin-bottom:8px}
       <span class="env-flap"></span>
       <span class="env-seal"><i>30</i></span>
     </button>
-    <p class="env-hint">Tap the seal to open</p>
+    <p class="env-hint">Tap to open</p>
   </div>
 </div>
 
@@ -419,7 +419,7 @@ footer .seal{display:block;margin-bottom:8px}
     setTimeout(() => env.classList.add('reveal'), reduce ? 0 : 2300);
     setTimeout(() => env.classList.add('done'), reduce ? 0 : 3000);
   }
-  document.getElementById('env-open').addEventListener('click', openEnvelope);
+  env.addEventListener('click', e => { if (!e.target.closest('.ab')) openEnvelope(); });
   function set(look, save){
     if (look === 'd' && root.dataset.look !== 'd') env.classList.remove('open', 'reveal', 'done');
     root.dataset.look = look;
