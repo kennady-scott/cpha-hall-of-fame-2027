@@ -146,24 +146,26 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;margin:0
 /* the card itself (lives inside the envelope, sized with container units) */
 .env-card{left:4%;right:4%;top:5%;height:90%;z-index:3;container-type:inline-size;
   background:#f7f2e8;color:#151515;border-radius:3px;
-  box-shadow:inset 0 0 0 2.2cqw #f7f2e8,inset 0 0 0 calc(2.2cqw + 1px) rgba(21,21,21,.45),inset 0 0 0 calc(2.9cqw + 1px) #f7f2e8,inset 0 0 0 calc(2.9cqw + 2px) rgba(21,21,21,.2),0 18px 40px -12px rgba(0,0,0,.6);
-  display:grid!important;grid-template-columns:44% 56%;align-items:center;padding:0 5cqw 0 3cqw;
+  box-shadow:0 18px 40px -12px rgba(0,0,0,.6);
+  display:grid!important;grid-template-columns:46% 54%;align-items:center;padding:0 6cqw 0 3.5cqw;
   transition:transform 1.25s cubic-bezier(.3,.1,.2,1)}
-.env-card > span{display:grid;justify-items:center;text-align:center;min-width:0}
-.card-thirty{font-family:var(--f-display);font-weight:800;font-style:italic;line-height:.8;font-size:27cqw;letter-spacing:-.04em;white-space:nowrap;
+.card-frame{position:absolute;inset:2.6cqw;border:1px solid rgba(21,21,21,.45);box-shadow:0 0 0 .8cqw #f7f2e8,0 0 0 calc(.8cqw + 1px) rgba(21,21,21,.18);pointer-events:none}
+.env-card > span:not(.card-frame){display:grid;justify-items:center;text-align:center;min-width:0}
+.card-thirty{font-family:var(--f-display);font-weight:800;font-style:italic;line-height:.8;font-size:31cqw;letter-spacing:-.04em;white-space:nowrap;
   background:linear-gradient(100deg,#6f9e2f 0%,#2d8a93 40%,#7cc6cc 50%,#2d8a93 60%,#6f9e2f 100%);background-size:250% 100%;
   -webkit-background-clip:text;background-clip:text;color:transparent;animation:sheen 6s ease-in-out infinite}
 .card-thirty svg{width:.64em;height:.8em;vertical-align:-.02em;overflow:visible;margin-left:.02em}
 .card-thirty .pestle{fill:#e07b2c}
 .card-thirty sup{font-size:.28em;font-style:normal;font-weight:500;vertical-align:.9em;letter-spacing:0;margin-left:.2em}
-.card-anniv{font-family:var(--f-display);font-size:3.1cqw;letter-spacing:.42em;text-transform:uppercase;color:#2d8a93;margin-top:1.6cqw;padding-left:.42em}
-.card-house{font-size:2cqw;letter-spacing:.24em;text-transform:uppercase;color:#555;padding-left:.24em}
-.card-inv{font-family:var(--f-display);font-style:italic;font-size:3.6cqw;color:#666;margin-top:2.4cqw}
-.card-title{font-family:var(--f-display);font-size:6.6cqw;line-height:1.02;margin-top:.8cqw;text-wrap:balance}
+.card-anniv{font-family:var(--f-display);font-size:3.7cqw;letter-spacing:.42em;text-transform:uppercase;color:#2d8a93;margin-top:1.6cqw;padding-left:.42em}
+.card-house{font-size:2.4cqw;letter-spacing:.24em;text-transform:uppercase;color:#555;padding-left:.24em}
+.card-inv{font-family:var(--f-display);font-style:italic;font-size:4.4cqw;color:#666;margin-top:2.6cqw}
+.card-title{font-family:var(--f-display);font-size:8cqw;line-height:1.02;margin-top:.8cqw;text-wrap:balance}
 .card-title em{display:block;color:#2d8a93;font-size:.8em}
 .card-rule{width:9cqw;height:1px;background:#151515;opacity:.35;margin:2.6cqw 0 2.2cqw}
-.card-when{font-size:2.1cqw;letter-spacing:.2em;text-transform:uppercase;line-height:1.9;color:#333;padding-left:.2em}
+.card-when{font-size:2.6cqw;letter-spacing:.2em;text-transform:uppercase;line-height:1.9;color:#333;padding-left:.2em}
 
+.env-confetti{position:fixed;inset:0;width:100%;height:100%;z-index:9;pointer-events:none}
 .env-continue{position:fixed;left:50%;bottom:calc(28px + env(safe-area-inset-bottom,0px));transform:translate(-50%,12px);z-index:8;
   opacity:0;pointer-events:none;transition:opacity .5s ease .2s,transform .5s ease .2s;
   border:1px solid rgba(243,238,228,.5);background:rgba(13,13,14,.6);color:#f3eee4;border-radius:999px;padding:13px 26px;
@@ -290,6 +292,7 @@ footer .seal{display:block;margin-bottom:8px}
       <span class="env-back"></span>
       <span class="env-liner"></span>
       <span class="env-card">
+        <span class="card-frame"></span>
         <span>
           <span class="card-thirty" aria-label="30th">3<svg viewBox="0 0 64 80" aria-hidden="true">
             <defs><linearGradient id="ring-grad-card" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2d8a93"/><stop offset="1" stop-color="#6f9e2f"/></linearGradient></defs>
@@ -312,6 +315,7 @@ footer .seal{display:block;margin-bottom:8px}
     </button>
     <p class="env-hint">Tap to open</p>
   </div>
+  <canvas class="env-confetti" id="env-confetti" aria-hidden="true"></canvas>
   <button type="button" class="env-continue" id="env-continue">View the evening ↓</button>
 </div>
 
@@ -475,6 +479,32 @@ footer .seal{display:block;margin-bottom:8px}
     const at = reduce ? [0, 0, 0, 0] : [0, 380, 1150, 2450];
     STAGES.forEach((st, i) => timers.push(setTimeout(() => env.classList.add(st), at[i])));
     timers.push(setTimeout(() => document.getElementById('env-continue').focus({ preventScroll: true }), reduce ? 0 : 3000));
+    if (!reduce) timers.push(setTimeout(confetti, at[3] + 350));
+  }
+  // a short burst of logo-colored confetti as the card lands
+  function confetti(){
+    const c = document.getElementById('env-confetti'), ctx = c.getContext('2d');
+    const dpr = Math.min(devicePixelRatio || 1, 2), w = innerWidth, h = innerHeight;
+    c.width = w * dpr; c.height = h * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const cols = ['#78c2c9', '#a2c855', '#e78e42', '#f3eee4', '#549840'];
+    const bits = Array.from({ length: 140 }, () => {
+      const a = -Math.PI / 2 + (Math.random() - .5) * 2.2, v = 6 + Math.random() * 9;
+      return { x: w / 2 + (Math.random() - .5) * 160, y: h * .52, vx: Math.cos(a) * v, vy: Math.sin(a) * v,
+        r: Math.random() * Math.PI, vr: (Math.random() - .5) * .4, s: 5 + Math.random() * 6, c: cols[Math.floor(Math.random() * cols.length)] };
+    });
+    const t0 = performance.now();
+    (function frame(t){
+      const life = (t - t0) / 2600;
+      ctx.clearRect(0, 0, w, h);
+      if (life >= 1 || env.classList.contains('done')) return;
+      ctx.globalAlpha = Math.min(1, (1 - life) * 2.5);
+      for (const b of bits){
+        b.vy += .28; b.vx *= .99; b.x += b.vx; b.y += b.vy; b.r += b.vr;
+        ctx.save(); ctx.translate(b.x, b.y); ctx.rotate(b.r); ctx.fillStyle = b.c;
+        ctx.fillRect(-b.s / 2, -b.s / 4, b.s, b.s / 2); ctx.restore();
+      }
+      requestAnimationFrame(frame);
+    })(t0);
   }
   function closeEnvelope(){
     env.classList.add('reveal');
