@@ -8,9 +8,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..700&family=Jost:wght@300;400;500;600&display=swap">
 <style>
-/* Event: the 30th anniversary of the California Pharmacy Hall of Fame, a black tie celebration hosted by CPhA.
+/* Event: the 30th anniversary of the California Pharmacists Hall of Fame, a black tie celebration hosted by CPhA.
    Layout: opens on a sealed black-tie envelope (wax seal, card slides out, confetti), then the gala sheet in deep harbor teal
-   built from the CPhA logo colors. Hero: California Pharmacy Hall of Fame / 30th (mortar-and-pestle 0) / Anniversary / Black Tie Celebration / hosted-by line.
+   built from the CPhA logo colors. Hero: California Pharmacists Hall of Fame / 30th (mortar-and-pestle 0) / Anniversary / Black Tie Celebration / hosted-by line.
    Then the committee strip, tickets, details. Token names are roles: --lime = labels/rules, --teal = highlights, --orange = action. */
 :root{
   --night:#0c2227;
@@ -268,7 +268,7 @@ footer .seal{display:block;margin-bottom:8px}
           <span class="card-anniv">Anniversary</span>
         </span>
         <span>
-          <span class="card-house">California Pharmacy Hall of Fame</span>
+          <span class="card-house">California Pharmacists Hall of Fame</span>
           <span class="card-inv">You are invited to a</span>
           <span class="card-title">Black Tie Celebration <em>The not-to-be-missed event of the year</em></span>
           <span class="card-rule"></span>
@@ -289,7 +289,7 @@ footer .seal{display:block;margin-bottom:8px}
   <span class="corner-logo" role="img" aria-label="CPhA Hall of Fame, 30 Years"></span>
   <canvas id="bubbles" aria-hidden="true"></canvas>
   <div class="wrap hero-inner">
-    <div class="logo-slot"><span class="seal">The California Pharmacy Hall of Fame</span></div>
+    <div class="logo-slot"><span class="seal">The California Pharmacists Hall of Fame</span></div>
     <p class="thirty" aria-label="30th">3<span class="zero-type">0</span><svg class="zero-mortar" viewBox="0 0 64 80" aria-hidden="true">
       <defs><linearGradient id="ring-grad" x1="0" y1="0" x2="1" y2="1"><stop class="ring-b" offset="0"/><stop class="ring-a" offset="1"/></linearGradient></defs>
       <g class="pestle" transform="rotate(28 33 50)">
@@ -311,7 +311,6 @@ footer .seal{display:block;margin-bottom:8px}
     </div>
     <div class="countdown" id="countdown" aria-live="polite">
       <div><b id="cd-days">200</b><small>Days</small></div>
-      <div><b id="cd-weeks">28</b><small>Weeks</small></div>
     </div>
     <div class="cta-row">
       <a class="btn" href="register.html#patron">Reserve your seat →</a>
@@ -431,7 +430,7 @@ footer .seal{display:block;margin-bottom:8px}
 </main>
 
 <footer>
-  <span class="seal">California Pharmacy Hall of Fame · 30th Anniversary</span>
+  <span class="seal">California Pharmacists Hall of Fame · 30th Anniversary</span>
   <a class="foot-link" href="committee.html">Meet the Hall of Fame Committee</a> ·
   Hosted by the California Pharmacists Association
 </footer>
@@ -495,12 +494,11 @@ footer .seal{display:block;margin-bottom:8px}
   addEventListener('resize', () => { if (env.classList.contains('s1')) env.style.setProperty('--land', landScale().toFixed(3)); });
 })();
 
-// countdown (days/weeks to Apr 23, 2027, Pacific)
+// countdown (days to Apr 23, 2027, Pacific)
 (function(){
   const target = new Date('2027-04-23T18:00:00-07:00');
   const days = Math.max(0, Math.ceil((target - new Date()) / 86400000));
   document.getElementById('cd-days').textContent = days;
-  document.getElementById('cd-weeks').textContent = Math.floor(days / 7);
 })();
 
 // QR code
