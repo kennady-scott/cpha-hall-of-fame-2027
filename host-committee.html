@@ -57,12 +57,6 @@ section{padding-block:56px}
 .ask h2 em{color:var(--teal)}
 .ask p{margin:0;color:#d6e2e1;font-size:1.08rem}
 .ask strong{color:var(--pearl);font-weight:500}
-.groups{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-top:28px}
-.grp{background:var(--night-2);border:1px solid var(--line);border-top:3px solid var(--teal);border-radius:8px;padding:14px 14px 16px;display:grid;gap:4px;align-content:start}
-.grp:nth-child(2),.grp:nth-child(5){border-top-color:var(--lime)}
-.grp:nth-child(3){border-top-color:var(--orange)}
-.grp b{font-family:var(--f-display);font-weight:600;font-size:1.05rem;line-height:1.2}
-.grp span{font-size:.85rem;color:var(--mist);line-height:1.4}
 .team{border-top:1px solid var(--line)}
 .team h3{font-family:var(--f-body);font-size:.78rem;letter-spacing:.26em;text-transform:uppercase;color:var(--mist);font-weight:500;margin-bottom:18px}
 .faces{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px}
@@ -98,11 +92,8 @@ fieldset{border:0;margin:0;padding:0;grid-column:span 6;display:grid;gap:10px;mi
 .opts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 18px}
 .opt{display:flex;align-items:center;gap:10px;font-size:.98rem;cursor:pointer}
 .opt input{width:19px;height:19px;accent-color:var(--teal-ink);margin:0;flex:none}
-.other-row{display:flex;align-items:center;gap:10px}
-.other-row input[type=text]{padding:8px 10px}
 .err{color:var(--error);font-size:.85rem;min-height:0}
 .f.bad input,.f.bad textarea{border-color:var(--error)}
-fieldset.bad .opts{outline:1.5px solid var(--error);outline-offset:6px;border-radius:4px}
 .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 .actions{grid-column:span 6;display:flex;flex-wrap:wrap;align-items:center;gap:14px 22px;margin-top:6px}
 .submit{border:0;border-radius:999px;background:var(--orange);color:var(--orange-ink);font:inherit;font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:.9rem;padding:16px 32px;cursor:pointer}
@@ -119,7 +110,6 @@ footer{border-top:1px solid var(--line);padding-block:28px;text-align:center;col
 footer a{color:var(--teal)}
 
 @media (max-width:820px){
-  .groups{grid-template-columns:repeat(2,minmax(0,1fr))}
   .faces{grid-template-columns:repeat(3,minmax(0,1fr))}
   .opts{grid-template-columns:1fr 1fr}
 }
@@ -157,13 +147,6 @@ footer a{color:var(--teal)}
         <span class="eyebrow">An invitation to every CPhA community</span>
         <h2>Join the <em>30th Anniversary Host Committee.</em></h2>
         <p>We would like <strong>one member from each CPhA group</strong> to join the 30th Anniversary Host Committee and help us strategize, design, and develop <strong>the not-to-be-missed event of the year</strong>. Will you represent yours?</p>
-      </div>
-      <div class="groups">
-        <div class="grp"><b>Local associations</b><span>Fresno County, San Fernando Valley, and more</span></div>
-        <div class="grp"><b>Specialty groups</b><span>Compounding, hospital, and more</span></div>
-        <div class="grp"><b>Fraternities</b><span>Pharmacy fraternities statewide</span></div>
-        <div class="grp"><b>Schools of pharmacy</b><span>Faculty, deans, and student leaders</span></div>
-        <div class="grp"><b>Cultural associations</b><span>Korean Pharmacists, Indian Pharmacists, and more</span></div>
       </div>
     </div>
   </section>
@@ -210,18 +193,6 @@ footer a{color:var(--teal)}
             <input type="text" id="organization" name="organization" autocomplete="organization" placeholder="e.g. Fresno County Pharmacists Association" required>
             <span class="err"></span>
           </div>
-          <fieldset id="group_type_set">
-            <legend>Type of group</legend>
-            <div class="opts">
-              <label class="opt"><input type="radio" name="group_type" value="Local association">Local association</label>
-              <label class="opt"><input type="radio" name="group_type" value="Specialty group">Specialty group</label>
-              <label class="opt"><input type="radio" name="group_type" value="Fraternity">Fraternity</label>
-              <label class="opt"><input type="radio" name="group_type" value="School / college of pharmacy">School / college of pharmacy</label>
-              <label class="opt"><input type="radio" name="group_type" value="Cultural association">Cultural association</label>
-              <span class="other-row"><label class="opt"><input type="radio" name="group_type" value="Other" id="gt_other">Other:</label><input type="text" id="group_other" name="group_other" aria-label="Other type of group"></span>
-            </div>
-            <span class="err"></span>
-          </fieldset>
           <div class="f">
             <label for="role">Your role in that group <i>(e.g., President, Delegate, Member)</i></label>
             <input type="text" id="role" name="role">
@@ -284,8 +255,6 @@ const SIGNUP_ENDPOINT = '';
   const form = document.getElementById('signup-form');
   const statusEl = document.getElementById('status');
   const btn = document.getElementById('submit');
-  const other = document.getElementById('group_other');
-  other.addEventListener('focus', () => { document.getElementById('gt_other').checked = true; });
 
   function mark(id, ok, msg){
     const el = document.getElementById(id);
@@ -298,11 +267,9 @@ const SIGNUP_ENDPOINT = '';
   form.addEventListener('submit', async e => {
     e.preventDefault();
     const v = n => (form.elements[n].value || '').trim();
-    const type = form.querySelector('input[name=group_type]:checked');
     const ok = [
       mark('full_name', !!v('full_name'), 'Enter your name.'),
       mark('organization', !!v('organization'), 'Enter the group you represent.'),
-      mark('group_type_set', !!type && (type.value !== 'Other' || !!v('group_other')), type ? 'Tell us what kind of group it is.' : 'Choose the type of group.'),
       mark('email', /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v('email')), 'Enter an email like name@example.com.')
     ].every(Boolean);
     if (!ok) { const first = form.querySelector('.bad input, .bad textarea'); if (first) first.focus(); return; }
@@ -310,7 +277,6 @@ const SIGNUP_ENDPOINT = '';
 
     const data = new URLSearchParams();
     ['full_name','organization','role','email','phone','city','employer','notes'].forEach(n => data.append(n, v(n)));
-    data.append('group_type', type.value === 'Other' ? 'Other: ' + v('group_other') : type.value);
     data.append('help', [...form.querySelectorAll('input[name=help]:checked')].map(c => c.value).join(', '));
     data.append('submitted_from', location.href);
 
