@@ -86,6 +86,13 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;margin:0
 .btn{display:flex;justify-content:center;align-items:center;gap:10px;width:100%;padding:16px 20px;border-radius:999px;border:0;cursor:pointer;
   background:var(--orange);color:var(--orange-ink);font:inherit;font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:.88rem}
 .btn:disabled{opacity:.4;cursor:not-allowed}
+.pay-hint{margin:0;font-size:.85rem;color:var(--mist);text-align:center}
+.pp{min-height:0;transition:opacity .2s}
+.pp.off{opacity:.45}
+.pay-status{margin:0;font-size:.9rem;min-height:0}
+.pay-status.bad{color:var(--orange)}
+.card .ref{margin:.12in 0 0;font-size:.85rem;color:var(--mist)}
+.card .ref b{color:var(--pearl);font-weight:500;letter-spacing:.04em}
 .secure{margin:0;font-size:.8rem;color:var(--mist);text-align:center}
 
 .done{display:grid;gap:16px;justify-items:start;padding-block:48px 100px;max-width:640px}
@@ -109,12 +116,12 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;margin:0
 </head>
 <body>
 
-<div class="preview">Preview of the CPhA-branded registration page. To pay today, use the <a href="https://fs25.formsite.com/cpha/idcru0f1l3/index" target="_blank" rel="noopener">current CPhA registration form</a>.</div>
+<div class="preview" id="test-banner"><strong>Test mode:</strong> payments run through PayPal’s sandbox and no real money moves. To pay today, use the <a href="https://fs25.formsite.com/cpha/idcru0f1l3/index" target="_blank" rel="noopener">current CPhA registration form</a>.</div>
 
 <header class="top">
   <div class="wrap">
-    <div class="mark"><span class="logo"><div role="img" aria-label="CPhA Hall of Fame, 30 Years"></div></span><a class="back" href="index.html#skip">← Hall of Fame Banquet</a></div>
-    <span class="when">30th Anniversary Banquet<br>April 23, 2027 · San Diego</span>
+    <div class="mark"><span class="logo"><div role="img" aria-label="CPhA Hall of Fame, 30 Years"></div></span><a class="back" href="index.html#skip">← Black Tie Celebration</a></div>
+    <span class="when">30th Anniversary Black Tie Celebration<br>April 23, 2027 · San Diego</span>
   </div>
 </header>
 
@@ -122,7 +129,7 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;margin:0
   <div class="head">
     <span class="eyebrow">Registration</span>
     <h1>Reserve your place at the <em>Hall of Fame</em></h1>
-    <p>Choose your tickets or sponsorship, tell us who you are, and continue to secure payment.</p>
+    <p>Choose your tickets or sponsorship, tell us who you are, and pay securely with PayPal or a credit card.</p>
   </div>
 
   <form class="layout" id="reg" novalidate>
@@ -152,20 +159,22 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;margin:0
       <ul class="lines" id="lines"><li class="empty">Nothing selected yet</li></ul>
       <div class="total"><span>Total</span><b id="total">$0</b></div>
       <p class="endow" id="endow" hidden></p>
-      <button class="btn" type="submit" id="pay" disabled>Continue to payment →</button>
-      <p class="secure">Payment is processed securely by CPhA.</p>
+      <p class="pay-hint" id="pay-hint">Choose at least one item and add your name and email to pay.</p>
+      <div id="paypal-buttons" class="pp"></div>
+      <p class="pay-status" id="pay-status" role="status" aria-live="polite"></p>
+      <p class="secure">Secure checkout by PayPal. Pay with your PayPal account or any major credit or debit card.</p>
     </aside>
   </form>
 </main>
 
 <main class="wrap" id="done-view" hidden>
   <div class="done">
-    <span class="eyebrow">Almost there</span>
+    <span class="eyebrow">You’re registered</span>
     <h1>Thank you, <em id="done-name">friend</em>.</h1>
-    <p>This preview stops here. In the live version, this step hands off to CPhA’s secure payment page and then sends a confirmation email.</p>
-    <div class="card"><ul class="lines" id="done-lines"></ul><div class="total"><span>Total</span><b id="done-total"></b></div></div>
-    <p>To pay today, use the <a class="link" href="https://fs25.formsite.com/cpha/idcru0f1l3/index" target="_blank" rel="noopener">current CPhA registration form</a>.</p>
-    <a class="back" href="index.html#skip">← Back to the Hall of Fame Banquet</a>
+    <p>Your payment went through. PayPal is emailing your receipt, and the Hall of Fame Steering Committee has your registration.</p>
+    <div class="card"><ul class="lines" id="done-lines"></ul><div class="total"><span>Total paid</span><b id="done-total"></b></div><p class="ref">PayPal transaction <b id="done-ref"></b></p></div>
+    <p>We can’t wait to celebrate with you on <b>Friday, April 23, 2027</b> in San Diego. Black tie.</p>
+    <a class="back" href="index.html#skip">← Back to the Black Tie Celebration</a>
   </div>
 </main>
 
@@ -204,7 +213,7 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;margin:0
   function lineItems(){
     return TIERS.filter(t => qty[t.id] > 0).map(t => ({ t, n: qty[t.id], sum: qty[t.id] * t.price }));
   }
-  function render(){
+  let render = function(){
     const items = lineItems();
     const total = items.reduce((a, l) => a + l.sum, 0);
     TIERS.forEach(t => {
@@ -223,9 +232,8 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;margin:0
     const endow = document.getElementById('endow');
     endow.hidden = qty.patron === 0;
     endow.textContent = `${money(qty.patron * 15)} of your order goes to the Hall of Fame endowment.`;
-    document.getElementById('pay').disabled = total === 0;
     return { items, total, html };
-  }
+  };
 
   itemsEl.addEventListener('click', e => {
     const b = e.target.closest('button[data-id]'); if (!b) return;
@@ -248,24 +256,115 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;margin:0
     f.querySelector('.err').textContent = ok ? '' : msg;
     return ok;
   }
-  document.getElementById('reg').addEventListener('submit', e => {
-    e.preventDefault();
-    const v = id => document.getElementById(id).value.trim();
+  const v = id => document.getElementById(id).value.trim();
+  const emailOk = () => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v('email'));
+  function detailsOk(show){
+    if (!show) return !!v('first') && !!v('last') && emailOk();
     const ok = [
       check('first', !!v('first'), 'Enter your first name.'),
       check('last', !!v('last'), 'Enter your last name.'),
-      check('email', /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v('email')), 'Enter an email like name@example.com.')
+      check('email', emailOk(), 'Enter an email like name@example.com.')
     ].every(Boolean);
-    if (!ok) { document.querySelector('.field.bad input').focus(); return; }
-    const { total, html } = render();
+    if (!ok) document.querySelector('.field.bad input').focus();
+    return ok;
+  }
+  document.getElementById('reg').addEventListener('submit', e => e.preventDefault());
+
+  // ---------- PayPal checkout ----------
+  // Sandbox until CPhA's live Client ID arrives: swap PAYPAL_CLIENT_ID and set PAYPAL_ENV = 'live'.
+  const PAYPAL_ENV = 'sandbox';
+  const PAYPAL_CLIENT_ID = 'sb';
+  const RECORD_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwcX2HF4N1__UFTp5htjYkXsdY1hHWEL-z-VybhasKEexlpTLvyHfMy9MjCo-JswUAg/exec';
+  if (PAYPAL_ENV === 'live') document.getElementById('test-banner').hidden = true;
+
+  const statusEl = document.getElementById('pay-status');
+  const hintEl = document.getElementById('pay-hint');
+  const box = document.getElementById('paypal-buttons');
+  let ppActions = null;
+  function say(msg, bad){ statusEl.textContent = msg; statusEl.className = 'pay-status' + (bad ? ' bad' : ''); }
+  function syncPay(){
+    const ready = lineItems().length > 0 && detailsOk(false);
+    box.classList.toggle('off', !ready);
+    hintEl.hidden = ready;
+    if (ppActions) ready ? ppActions.enable() : ppActions.disable();
+  }
+  const _render = render;
+  render = function(){ const r = _render(); syncPay(); return r; };
+  document.getElementById('reg').addEventListener('input', syncPay);
+
+  function record(order, capture){
+    const items = lineItems();
+    const total = items.reduce((a, l) => a + l.sum, 0);
+    const cap = capture && capture.purchase_units && capture.purchase_units[0].payments && capture.purchase_units[0].payments.captures && capture.purchase_units[0].payments.captures[0];
+    const data = new URLSearchParams({
+      form_type: 'registration',
+      full_name: v('first') + ' ' + v('last'),
+      first: v('first'), last: v('last'), email: v('email'), phone: v('phone'),
+      organization: v('org'), program_name: v('recog'), guests: v('guests'),
+      items: items.map(l => l.n + ' × ' + l.t.name + ' (' + money(l.sum) + ')').join('; '),
+      total: total.toFixed(2),
+      paypal_order: order, paypal_capture: cap ? cap.id : '', paypal_status: capture ? capture.status : '',
+      payer_email: capture && capture.payer ? capture.payer.email_address || '' : '',
+      mode: PAYPAL_ENV, submitted_from: location.href
+    });
+    // The Apps Script answers cross-site posts opaquely; PayPal already holds the authoritative record.
+    return fetch(RECORD_ENDPOINT, { method: 'POST', mode: 'no-cors', body: data }).catch(() => {});
+  }
+
+  function showDone(ref){
+    const { total, html } = _render();
     document.getElementById('done-name').textContent = v('first');
     document.getElementById('done-lines').innerHTML = html;
     document.getElementById('done-total').textContent = money(total);
+    document.getElementById('done-ref').textContent = ref;
     document.getElementById('form-view').hidden = true;
     document.getElementById('done-view').hidden = false;
     scrollTo(0, 0);
-  });
+  }
 
+  function mountPayPal(){
+    const sdk = document.createElement('script');
+    sdk.src = 'https://www.paypal.com/sdk/js?client-id=' + encodeURIComponent(PAYPAL_CLIENT_ID) + '&currency=USD&intent=capture&enable-funding=card';
+    sdk.onerror = () => say('PayPal didn’t load. Check your connection and refresh the page.', true);
+    sdk.onload = () => {
+      paypal.Buttons({
+        style: { layout: 'vertical', color: 'gold', shape: 'pill', label: 'pay', height: 48 },
+        onInit(data, actions){ ppActions = actions; syncPay(); },
+        onClick(){
+          const okItems = lineItems().length > 0;
+          if (!okItems) say('Choose at least one ticket or sponsorship first.', true);
+          const okDetails = detailsOk(true);
+          if (okItems && okDetails) say('');
+          return okItems && okDetails;
+        },
+        createOrder(data, actions){
+          const items = lineItems();
+          const total = items.reduce((a, l) => a + l.sum, 0).toFixed(2);
+          return actions.order.create({
+            intent: 'CAPTURE',
+            purchase_units: [{
+              description: 'California Pharmacists Hall of Fame · 30th Anniversary Black Tie Celebration · April 23, 2027',
+              custom_id: (v('last') + '-' + Date.now()).slice(0, 127),
+              amount: { currency_code: 'USD', value: total, breakdown: { item_total: { currency_code: 'USD', value: total } } },
+              items: items.map(l => ({ name: l.t.name, quantity: String(l.n), category: 'DIGITAL_GOODS', unit_amount: { currency_code: 'USD', value: l.t.price.toFixed(2) } }))
+            }],
+            application_context: { brand_name: 'California Pharmacists Association', shipping_preference: 'NO_SHIPPING', user_action: 'PAY_NOW' }
+          });
+        },
+        onApprove(data, actions){
+          say('Finishing your payment…');
+          return actions.order.capture().then(capture => {
+            const cap = capture.purchase_units[0].payments.captures[0];
+            return record(data.orderID, capture).then(() => showDone(cap ? cap.id : data.orderID));
+          }).catch(() => say('PayPal couldn’t complete the payment. You haven’t been charged. Please try again.', true));
+        },
+        onCancel(){ say('Payment canceled. Your selections are still here when you’re ready.'); },
+        onError(){ say('Something went wrong with PayPal. You haven’t been charged. Please refresh and try again.', true); }
+      }).render('#paypal-buttons');
+    };
+    document.head.appendChild(sdk);
+  }
+  mountPayPal();
   render();
 })();
 </script>
