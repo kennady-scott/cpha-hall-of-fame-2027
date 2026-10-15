@@ -87,9 +87,8 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;margin:0
   background:var(--orange);color:var(--orange-ink);font:inherit;font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:.88rem}
 .btn:disabled{opacity:.4;cursor:not-allowed}
 .pay-hint{margin:0;font-size:.85rem;color:var(--mist);text-align:center}
-.pp{background:#fff;border-radius:16px;padding:14px 14px 4px;transition:filter .2s}
+.pp{background:#fff;border-radius:16px;padding:14px 14px 4px}
 .pp:empty{display:none}
-.pp.off{filter:grayscale(1) contrast(.85)}
 .pay-status{margin:0;font-size:.9rem;min-height:0}
 .pay-status.bad{color:var(--orange)}
 .card .ref{margin:.12in 0 0;font-size:.85rem;color:var(--mist)}
@@ -284,8 +283,9 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;margin:0
   let ppActions = null;
   function say(msg, bad){ statusEl.textContent = msg; statusEl.className = 'pay-status' + (bad ? ' bad' : ''); }
   function syncPay(){
-    const ready = lineItems().length > 0 && detailsOk(false);
-    box.classList.toggle('off', !ready);
+    const hasItems = lineItems().length > 0;
+    const ready = hasItems && detailsOk(false);
+    hintEl.textContent = hasItems ? 'Add your name and email above, then choose how to pay.' : 'Choose at least one item and add your name and email to pay.';
     hintEl.hidden = ready;
     if (ppActions) ready ? ppActions.enable() : ppActions.disable();
   }
