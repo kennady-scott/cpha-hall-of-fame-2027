@@ -209,17 +209,12 @@ section{padding-block:80px}
 .tier a:hover{color:var(--orange);border-color:var(--orange)}
 .tier.feature{background:linear-gradient(160deg,var(--feature),var(--night-2))}
 
-/* ---------- details + QR ---------- */
+/* ---------- details ---------- */
 .details{border-top:1px solid var(--line);background:var(--night-2)}
-.details-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:48px;align-items:center}
+.details-grid{display:grid;grid-template-columns:1fr;gap:48px;align-items:center;max-width:760px}
 .details dl{display:grid;grid-template-columns:auto 1fr;gap:16px 28px;margin:28px 0 0}
 .details dt{font-size:.75rem;letter-spacing:.22em;text-transform:uppercase;color:var(--lime);padding-top:4px}
 .details dd{margin:0;font-size:1.05rem}
-.qr-card{justify-self:center;display:grid;gap:14px;justify-items:center;text-align:center}
-.qr-frame{background:#fff;padding:16px;border-radius:6px;box-shadow:0 0 0 1px var(--lime),0 0 0 8px var(--night),0 0 0 9px var(--line)}
-#qr{width:180px;height:180px}
-#qr img,#qr canvas{width:180px!important;height:180px!important;display:block}
-.qr-card p{margin:0;color:var(--mist);font-size:.9rem;max-width:26ch}
 
 footer{padding-block:40px;text-align:center;color:var(--mist);font-size:.88rem;border-top:1px solid var(--line)}
 footer .seal{display:block;margin-bottom:8px}
@@ -431,10 +426,6 @@ footer .seal{display:block;margin-bottom:8px}
           <a class="btn" href="register.html">Register now →</a>
         </div>
       </div>
-      <div class="qr-card">
-        <div class="qr-frame"><div id="qr" role="img" aria-label="QR code linking to the registration page"></div></div>
-        <p>Scan to register and pay from your phone.</p>
-      </div>
     </div>
   </section>
 </main>
@@ -450,7 +441,6 @@ footer .seal{display:block;margin-bottom:8px}
   <a class="btn" href="register.html">Reserve</a>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
 // black-tie envelope intro (plays on every visit; links ending #skip go straight to the page)
 (function(){
@@ -511,14 +501,6 @@ footer .seal{display:block;margin-bottom:8px}
   document.getElementById('cd-days').textContent = days;
 })();
 
-// QR code
-try {
-  new QRCode(document.getElementById('qr'), {
-    text: 'https://kennady-scott.github.io/cpha-hall-of-fame-2027/register.html',
-    width: 360, height: 360, colorDark: '#0c2227', colorLight: '#ffffff',
-    correctLevel: QRCode.CorrectLevel.M
-  });
-} catch (e) {}
 
 // rising bubbles in pale teal and lime
 (function(){
