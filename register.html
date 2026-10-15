@@ -271,9 +271,9 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;margin:0
   document.getElementById('reg').addEventListener('submit', e => e.preventDefault());
 
   // ---------- PayPal checkout ----------
-  // Sandbox until CPhA's live Client ID arrives: swap PAYPAL_CLIENT_ID and set PAYPAL_ENV = 'live'.
-  const PAYPAL_ENV = 'sandbox';
-  const PAYPAL_CLIENT_ID = 'sb';
+  // CPhA's PayPal account (public Client ID; payments go straight to CPhA). Set PAYPAL_ENV = 'sandbox' with client 'sb' to test.
+  const PAYPAL_ENV = 'live';
+  const PAYPAL_CLIENT_ID = 'BAAf9rhIeitgsY599NWYR8ASgWyZWGr30DDQ0XBkeCJ33c9mVl_M0tBFNDPq469FvlpleQ1JlIcqu5UcJk';
   const RECORD_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwcX2HF4N1__UFTp5htjYkXsdY1hHWEL-z-VybhasKEexlpTLvyHfMy9MjCo-JswUAg/exec';
   if (PAYPAL_ENV === 'live') document.getElementById('test-banner').hidden = true;
 
