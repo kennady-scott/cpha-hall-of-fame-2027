@@ -56,6 +56,8 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;margin:0
 .item .price{font-family:var(--f-display);color:var(--teal);font-size:1.15rem;font-variant-numeric:lining-nums tabular-nums;margin-left:8px;white-space:nowrap}
 .item p{margin:4px 0 0;color:var(--mist);font-size:.88rem}
 .item .flag{display:inline-block;font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;background:var(--lime);color:var(--night);padding:2px 8px;border-radius:2px;font-weight:600;margin-top:6px}
+.apply{display:inline-flex;align-items:center;padding:10px 20px;border-radius:999px;border:1px solid var(--teal);color:var(--teal);text-decoration:none;font-weight:500;letter-spacing:.06em;text-transform:uppercase;font-size:.8rem;white-space:nowrap}
+.apply:hover{background:var(--teal);color:var(--night)}
 .qty{display:flex;align-items:center;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--field)}
 .qty button{width:40px;height:40px;border:0;background:transparent;color:var(--pearl);font-size:1.2rem;cursor:pointer}
 .qty button:hover:not(:disabled){background:var(--line)}
@@ -109,7 +111,7 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;margin:0
 @media (max-width:560px){
   .fields{grid-template-columns:1fr}
   .item{grid-template-columns:1fr;padding:16px}
-  .qty{justify-self:start}
+  .qty,.apply{justify-self:start}
 }
 @media (prefers-reduced-motion:reduce){.item{transition:none}}
 </style>
@@ -181,7 +183,7 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;margin:0
 <script>
 (function(){
   const TIERS = [
-    { id:'presenting', name:'Presenting Sponsor', price:10000, max:1, flag:'Only one available', desc:'Name recognition throughout the entire event.' },
+    { id:'presenting', name:'Presenting Sponsor', price:10000, apply:'presenting.html', flag:'Only one available · By application', desc:'Name recognition throughout the entire event. Submit an application for Steering Committee review.' },
     { id:'host', name:'Host Committee Sponsor', price:5000, desc:'Support the 30th Anniversary Host Committee.' },
     { id:'gold', name:'Gold Sponsor', price:2500, desc:'Corporate or family. Includes tickets to use or donate to a student or faculty member.' },
     { id:'vip', name:'VIP Table Sponsor', price:2000, desc:'Table of eight. Prime location and our largest tables.' },
@@ -192,6 +194,8 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;margin:0
   const money = n => '$' + n.toLocaleString('en-US');
   const qty = Object.fromEntries(TIERS.map(t => [t.id, 0]));
   const pre = location.hash.slice(1);
+  if (pre === 'presenting') { location.replace('presenting.html'); return; }
+  const buyable = TIERS.filter(t => !t.apply);
   if (pre in qty) qty[pre] = 1;
   if (pre in qty) TIERS.sort((a, b) => (b.id === pre) - (a.id === pre));
 
@@ -203,11 +207,11 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;margin:0
         <p>${t.desc}</p>
         ${t.flag ? `<span class="flag">${t.flag}</span>` : ''}
       </div>
-      <div class="qty" role="group" aria-label="Quantity, ${t.name}">
+      ${t.apply ? `<a class="apply" href="${t.apply}">Apply →</a>` : `<div class="qty" role="group" aria-label="Quantity, ${t.name}">
         <button type="button" data-id="${t.id}" data-d="-1" aria-label="Fewer">−</button>
         <input id="q-${t.id}" type="number" inputmode="numeric" min="0" max="${t.max || 99}" value="0" aria-label="${t.name} quantity">
         <button type="button" data-id="${t.id}" data-d="1" aria-label="More">+</button>
-      </div>
+      </div>`}
     </div>`).join('');
 
   function lineItems(){
@@ -216,7 +220,7 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;margin:0
   let render = function(){
     const items = lineItems();
     const total = items.reduce((a, l) => a + l.sum, 0);
-    TIERS.forEach(t => {
+    buyable.forEach(t => {
       const row = document.getElementById('row-' + t.id);
       const input = document.getElementById('q-' + t.id);
       row.classList.toggle('on', qty[t.id] > 0);
