@@ -189,10 +189,50 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;margin:0
   // Private invitation links (register.html?invite=CODE) unlock the Presenting Sponsor checkout.
   // Only SHA-256 fingerprints of the codes live here, so the codes can't be read from the page source.
   const INVITES = { 'aad0bcceb7d43d9c3b34702057d072e704e12e8378b612a76b1cd631703a82bc': 'PCCA' };
+  // Plain-JS SHA-256 for browsers that withhold crypto.subtle (e.g. a page they don't yet treat as secure).
+  function sha256hex(str){
+    const K = [], H = [];
+    for (let n = 2, found = 0; found < 64; n++) {
+      let prime = true;
+      for (let d = 2; d * d <= n; d++) if (n % d === 0) { prime = false; break; }
+      if (!prime) continue;
+      if (found < 8) H[found] = (Math.pow(n, 1 / 2) % 1) * 4294967296 | 0;
+      K[found++] = (Math.pow(n, 1 / 3) % 1) * 4294967296 | 0;
+    }
+    const bytes = [...new TextEncoder().encode(str)];
+    const bitLen = bytes.length * 8;
+    bytes.push(0x80);
+    while (bytes.length % 64 !== 56) bytes.push(0);
+    for (let i = 7; i >= 0; i--) bytes.push(i > 3 ? 0 : (bitLen >>> (i * 8)) & 255);
+    const rotr = (x, n) => (x >>> n) | (x << (32 - n));
+    for (let off = 0; off < bytes.length; off += 64) {
+      const w = [];
+      for (let i = 0; i < 64; i++) {
+        if (i < 16) w[i] = (bytes[off + i * 4] << 24) | (bytes[off + i * 4 + 1] << 16) | (bytes[off + i * 4 + 2] << 8) | bytes[off + i * 4 + 3];
+        else {
+          const s0 = rotr(w[i - 15], 7) ^ rotr(w[i - 15], 18) ^ (w[i - 15] >>> 3);
+          const s1 = rotr(w[i - 2], 17) ^ rotr(w[i - 2], 19) ^ (w[i - 2] >>> 10);
+          w[i] = (w[i - 16] + s0 + w[i - 7] + s1) | 0;
+        }
+      }
+      let [a, b, c, d, e, f, g, h] = H;
+      for (let i = 0; i < 64; i++) {
+        const t1 = (h + (rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25)) + ((e & f) ^ (~e & g)) + K[i] + w[i]) | 0;
+        const t2 = ((rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22)) + ((a & b) ^ (a & c) ^ (b & c))) | 0;
+        h = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;
+      }
+      [a, b, c, d, e, f, g, h].forEach((v, i) => { H[i] = (H[i] + v) | 0; });
+    }
+    return H.map(v => (v >>> 0).toString(16).padStart(8, '0')).join('');
+  }
   async function inviteFor(code){
-    if (!code || !crypto.subtle) return null;
-    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(code.trim()));
-    const hex = [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+    if (!code) return null;
+    code = code.trim();
+    let hex;
+    try {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(code));
+      hex = [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+    } catch (e) { hex = sha256hex(code); }
     return INVITES[hex] || null;
   }
   const invitedAs = await inviteFor(new URLSearchParams(location.search).get('invite'));
