@@ -159,6 +159,7 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;margin:0
 .cta-row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
 .countdown{display:flex;gap:28px;justify-content:center;font-variant-numeric:tabular-nums}
 .countdown div{display:grid;justify-items:center}
+.countdown div[hidden]{display:none}
 .countdown b{font-family:var(--f-display);font-size:2.2rem;font-weight:500;color:var(--teal);line-height:1}
 .countdown small{font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--mist)}
 .notice{display:inline-block;border:1px solid var(--line);border-radius:4px;padding:8px 16px;font-size:.9rem;color:var(--mist)}
@@ -310,6 +311,8 @@ footer .seal{display:block;margin-bottom:8px}
     </div>
     <div class="countdown" id="countdown" aria-live="polite">
       <div><b id="cd-days">200</b><small>Days</small></div>
+      <div id="st-total" hidden><b>$0</b><small>Committed</small></div>
+      <div id="st-tickets" hidden><b>0</b><small>Tickets reserved</small></div>
     </div>
     <div class="cta-row">
       <a class="btn" href="register.html#patron">Reserve your seat →</a>
@@ -500,6 +503,17 @@ footer .seal{display:block;margin-bottom:8px}
   const target = new Date('2027-04-23T18:00:00-07:00');
   const days = Math.max(0, Math.ceil((target - new Date()) / 86400000));
   document.getElementById('cd-days').textContent = days;
+})();
+
+// running totals from the Pipeline tab (served by the sign-up Apps Script; hidden if it can't be reached)
+(function(){
+  const STATS = 'https://script.google.com/macros/s/AKfycbwcX2HF4N1__UFTp5htjYkXsdY1hHWEL-z-VybhasKEexlpTLvyHfMy9MjCo-JswUAg/exec?stats=1';
+  fetch(STATS).then(r => r.json()).then(d => {
+    if (!d || !d.ok || !d.total) return;
+    const show = (id, text) => { const el = document.getElementById(id); el.querySelector('b').textContent = text; el.hidden = false; };
+    show('st-total', '$' + Math.round(d.total).toLocaleString('en-US'));
+    show('st-tickets', d.tickets.toLocaleString('en-US'));
+  }).catch(() => {});
 })();
 
 
