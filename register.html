@@ -154,7 +154,7 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;margin:0
           <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required><span class="err"></span></div>
           <div class="field"><label for="phone">Phone <i>(optional)</i></label><input id="phone" name="phone" type="tel" autocomplete="tel"><span class="err"></span></div>
           <div class="field full"><label for="org">Pharmacy, company or school <i>(optional)</i></label><input id="org" name="org" autocomplete="organization"><span class="err"></span></div>
-          <div class="field full"><label for="recog">Name as it should appear in the program <i>(sponsors)</i></label><input id="recog" name="recog" placeholder="e.g. The Garcia Family, or Coastal Compounding Pharmacy"><span class="err"></span></div>
+          <div class="field full"><label for="recog">Recognize me as <i>(in the program and on our supporters page; leave blank to stay unlisted)</i></label><input id="recog" name="recog" placeholder="e.g. The Garcia Family, or Coastal Compounding Pharmacy"><span class="err"></span></div>
           <div class="field full"><label for="guests">Guest names and dietary needs <i>(optional)</i></label><textarea id="guests" name="guests" placeholder="Who will sit at your table? Any vegetarian, vegan or allergy needs?"></textarea></div>
         </div>
       </section>
@@ -239,6 +239,7 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;margin:0
 
   const TIERS = [
     { id:'presenting', name:'Presenting Sponsor', price:10000, apply:'presenting.html', flag:'Only one available · By application', desc:'Name recognition throughout the entire event. Submit an application for Steering Committee review.' },
+    { id:'lifetime', name:'Founding Member · Lifetime Patron', price:7500, flag:'New · Founding Members', desc:'Two lifetime tickets to every Hall of Fame banquet, from 2027 onward. Recognized as the first class of Lifetime Patrons.' },
     { id:'host', name:'Host Committee Sponsor', price:5000, desc:'Support the 30th Anniversary Host Committee.' },
     { id:'gold', name:'Gold Sponsor', price:2500, desc:'Corporate or family. Includes tickets to use or donate to a student or faculty member.' },
     { id:'vip', name:'VIP Table Sponsor', price:2000, desc:'Table of eight. Prime location and our largest tables.' },
@@ -256,8 +257,8 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;margin:0
     if (!document.getElementById('org').value) document.getElementById('org').value = invitedAs;
     if (!location.hash) history.replaceState(null, '', location.search + '#presenting');
   }
+  if (!invitedAs) TIERS.shift(); // the Presenting Sponsorship is spoken for (PCCA); only an invitation link shows it
   const pre = location.hash.slice(1);
-  if (pre === 'presenting' && !invitedAs) { location.replace('presenting.html'); return; }
   const buyable = TIERS.filter(t => !t.apply);
   if (pre in qty) qty[pre] = 1;
   if (pre in qty) TIERS.sort((a, b) => (b.id === pre) - (a.id === pre));
