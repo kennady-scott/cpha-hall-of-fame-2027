@@ -160,6 +160,7 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;margin:0
 .countdown{display:flex;gap:28px;justify-content:center;font-variant-numeric:tabular-nums}
 .countdown div{display:grid;justify-items:center}
 .countdown div[hidden]{display:none}
+@media (max-width:640px){.countdown{display:grid;grid-template-columns:repeat(2,auto);justify-content:center;gap:18px 44px}.countdown small{text-align:center}}
 .countdown b{font-family:var(--f-display);font-size:2.2rem;font-weight:500;color:var(--teal);line-height:1}
 .countdown small{font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--mist)}
 .notice{display:inline-block;border:1px solid var(--line);border-radius:4px;padding:8px 16px;font-size:.9rem;color:var(--mist)}
@@ -345,6 +346,7 @@ footer .seal{display:block;margin-bottom:8px}
       <div><b id="cd-days">200</b><small>Days</small></div>
       <div id="st-total" hidden><b>$0</b><small>Committed</small></div>
       <div id="st-tickets" hidden><b>0</b><small>Tickets reserved</small></div>
+      <div id="st-vip" hidden><b>0</b><small>VIP tables left</small></div>
     </div>
     <div class="cta-row">
       <a class="btn" href="register.html#patron">Reserve your seat →</a>
@@ -573,6 +575,8 @@ footer .seal{display:block;margin-bottom:8px}
     }
     if (d.vipLimit) {
       const left = Math.max(0, d.vipLimit - d.tables);
+      show('st-vip', left);
+      document.querySelector('#st-vip small').textContent = 'of ' + d.vipLimit + ' VIP tables left';
       document.getElementById('vip-left').textContent = left;
       document.getElementById('vip-left').parentNode.lastChild.textContent = ' of ' + d.vipLimit + ' remaining';
       document.getElementById('seats-left').textContent = d.seatsLeft > 0 ? Math.round(d.seatsLeft) + ' seats remaining in the room' : '';
