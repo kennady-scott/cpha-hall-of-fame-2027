@@ -40,6 +40,12 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;margin:0
 .invite{margin-top:28px;border:1px solid var(--lime);border-radius:8px;background:var(--night-2);padding:16px 20px;display:grid;gap:6px}
 .invite p{margin:0;color:var(--pearl)}
 .invite strong{color:var(--teal);font-weight:500}
+.invite[hidden]{display:none}
+.presented-by{margin-top:28px;display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;border:1px solid var(--line);border-radius:8px;background:var(--night-2);padding:14px 20px}
+.presented-by span{font-size:.72rem;letter-spacing:.26em;text-transform:uppercase;color:var(--mist)}
+.presented-by img{height:34px;width:auto;display:block}
+.presented-by em{margin-left:auto;font-family:var(--f-display);color:var(--teal)}
+@media (max-width:560px){.presented-by em{margin-left:0}}
 .head{padding-block:48px 28px;display:grid;gap:10px}
 .head h1{font-size:clamp(2.2rem,5vw,3.4rem);line-height:1.05}
 .head h1 em{color:var(--teal)}
@@ -131,6 +137,7 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;margin:0
 </header>
 
 <main class="wrap" id="form-view">
+  <div class="presented-by" id="presented-by"><span>Presented by</span><img src="pcca-logo-white.png" alt="PCCA, Professional Compounding Centers of America" width="498" height="150"><em>Thank you, PCCA</em></div>
   <div class="invite" id="invite-note" hidden><span class="eyebrow">Presenting Sponsor invitation</span><p>Welcome, <b></b>. The Steering Committee has approved you as the <strong>Presenting Sponsor</strong> of the 30th Anniversary Black Tie Celebration. It’s ready in your order below.</p></div>
   <div class="head">
     <span class="eyebrow">Registration</span>
@@ -188,7 +195,7 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;margin:0
 (async function(){
   // Private invitation links (register.html?invite=CODE) unlock the Presenting Sponsor checkout.
   // Only SHA-256 fingerprints of the codes live here, so the codes can't be read from the page source.
-  const INVITES = { 'aad0bcceb7d43d9c3b34702057d072e704e12e8378b612a76b1cd631703a82bc': 'PCCA' };
+  const INVITES = {}; // PCCA's invitation was used: they paid on 10/29/2026, so it no longer unlocks a second Presenting Sponsorship
   // Plain-JS SHA-256 for browsers that withhold crypto.subtle (e.g. a page they don't yet treat as secure).
   function sha256hex(str){
     const K = [], H = [];
