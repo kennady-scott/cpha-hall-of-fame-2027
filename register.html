@@ -132,7 +132,7 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;margin:0
 <header class="top">
   <div class="wrap">
     <div class="mark"><span class="logo"><div role="img" aria-label="CPhA Hall of Fame, 30 Years"></div></span><a class="back" href="index.html#skip">← Black Tie Celebration</a></div>
-    <span class="when">30th Anniversary Black Tie Celebration<br>April 23, 2027 · San Diego</span>
+    <span class="when">30th Anniversary Black Tie Celebration<br>April 23, 2027 · 6:30 pm · San Diego</span>
   </div>
 </header>
 
@@ -186,7 +186,7 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;margin:0
     <h1>Thank you, <em id="done-name">friend</em>.</h1>
     <p>Your payment went through. PayPal is emailing your receipt, and the Hall of Fame Steering Committee has your registration.</p>
     <div class="card"><ul class="lines" id="done-lines"></ul><div class="total"><span>Total paid</span><b id="done-total"></b></div><p class="ref">PayPal transaction <b id="done-ref"></b></p></div>
-    <p>We can’t wait to celebrate with you on <b>Friday, April 23, 2027</b> in San Diego. Black tie.</p>
+    <p>We can’t wait to celebrate with you on <b>Friday, April 23, 2027, at 6:30 pm</b> in San Diego. Black tie.</p>
     <a class="back" href="index.html#skip">← Back to the Black Tie Celebration</a>
   </div>
 </main>
@@ -419,7 +419,7 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;margin:0
           return actions.order.create({
             intent: 'CAPTURE',
             purchase_units: [{
-              description: 'California Pharmacists Hall of Fame · 30th Anniversary Black Tie Celebration · April 23, 2027',
+              description: 'California Pharmacists Hall of Fame · 30th Anniversary Black Tie Celebration · April 23, 2027, 6:30 pm',
               custom_id: (v('last') + '-' + Date.now()).slice(0, 127),
               amount: { currency_code: 'USD', value: total, breakdown: { item_total: { currency_code: 'USD', value: total } } },
               items: items.map(l => ({ name: l.t.name, quantity: String(l.n), category: 'DIGITAL_GOODS', unit_amount: { currency_code: 'USD', value: l.t.price.toFixed(2) } }))
