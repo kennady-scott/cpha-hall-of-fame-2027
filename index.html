@@ -240,6 +240,8 @@ section{padding-block:80px}
 .sup-group.lead{grid-column:1/-1;text-align:center}
 .sup-group.lead h3{border:0;padding:0}
 .sup-group.lead li{font-size:clamp(1.5rem,3.5vw,2.1rem)}
+.sup-logo{display:block;height:auto;width:min(100%,180px);margin:0 auto}
+.sup-group.lead .sup-logo{width:min(80%,320px)}
 .sup-join{margin:40px 0 0;color:var(--mist)}
 .sup-join a{color:var(--teal)}
 @media (max-width:640px){.pres-bar .thanks{margin-left:0}}
@@ -583,6 +585,8 @@ footer .seal{display:block;margin-bottom:8px}
       document.getElementById('vip-progress').hidden = false;
       requestAnimationFrame(() => { document.getElementById('vip-bar').style.width = Math.min(100, d.tables / d.vipLimit * 100) + '%'; });
     }
+    // Supporters whose logo we have show it in place of their name.
+    const LOGOS = [[/\bPCCA\b/, 'pcca-logo-white.png']];
     const sup = d.supporters || {};
     const grid = document.getElementById('sup-grid');
     GROUPS.forEach(([key, label]) => {
@@ -592,7 +596,16 @@ footer .seal{display:block;margin-bottom:8px}
       g.className = 'sup-group' + (key === 'presenting' ? ' lead' : '');
       const h = document.createElement('h3'); h.textContent = label; g.appendChild(h);
       const ul = document.createElement('ul');
-      names.forEach(n => { const li = document.createElement('li'); li.textContent = n; ul.appendChild(li); });
+      names.forEach(n => {
+        const li = document.createElement('li');
+        const logo = LOGOS.find(([re]) => re.test(n));
+        if (logo) {
+          const img = document.createElement('img');
+          img.src = logo[1]; img.alt = n; img.className = 'sup-logo';
+          li.appendChild(img);
+        } else li.textContent = n;
+        ul.appendChild(li);
+      });
       g.appendChild(ul);
       grid.appendChild(g);
     });
