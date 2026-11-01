@@ -7,7 +7,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="description" content="One member from each CPhA group is invited to join the 30th Anniversary Host Committee for the California Pharmacists Hall of Fame Black Tie Celebration, April 23, 2027, 6:30 pm, San Diego.">
+<meta name="description" content="One member from a variety of pharmacy and pharmacist organizations is invited to join the 30th Anniversary Host Committee for the California Pharmacists Hall of Fame Black Tie Celebration, April 23, 2027, 6:30 pm, San Diego.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..700&family=Jost:wght@300;400;500;600&display=swap">
@@ -123,6 +123,7 @@ footer a{color:var(--teal)}
   .sign{flex-direction:column;align-items:flex-start}
 }
 @media (prefers-reduced-motion:reduce){.thirty{animation:none}}
+.ask .groups{margin-top:14px;font-size:.95em;letter-spacing:.06em;color:var(--teal,#8fd2d8)}
 </style>
 </head>
 <body>
@@ -147,9 +148,10 @@ footer a{color:var(--teal)}
   <section>
     <div class="wrap">
       <div class="ask">
-        <span class="eyebrow">An invitation to every CPhA community</span>
+        <span class="eyebrow">An invitation to every pharmacy community</span>
         <h2>Join the <em>30th Anniversary Host Committee.</em></h2>
-        <p>We would like <strong>one member from each CPhA group</strong> to join the 30th Anniversary Host Committee and help us strategize, design, and develop <strong>the not-to-be-missed event of the year</strong>. Will you represent yours?</p>
+        <p>We would like <strong>one member from a variety of pharmacy and pharmacist organizations</strong> to join the 30th Anniversary Host Committee and help us strategize, design, and develop <strong>the not-to-be-missed event of the year</strong>. Will you represent yours?</p>
+        <p class="groups">Pharmacists · Technicians · Students · Academia · Research · and more</p>
       </div>
     </div>
   </section>
@@ -181,7 +183,7 @@ footer a{color:var(--teal)}
       <div class="card" id="card">
         <div class="card-head">
           <span class="eyebrow">Host Committee Sign-Up</span>
-          <h2>Represent your group at <em>the 30th.</em></h2>
+          <h2>Represent your organization at <em>the 30th.</em></h2>
           <p>Fill this out and it goes straight to Robert P Nickell. Please sign up by <b>November 1, 2026</b>.</p>
         </div>
 
@@ -192,7 +194,7 @@ footer a{color:var(--teal)}
             <span class="err"></span>
           </div>
           <div class="f">
-            <label for="organization">CPhA group or organization you represent</label>
+            <label for="organization">Organization you represent</label>
             <input type="text" id="organization" name="organization" autocomplete="organization" placeholder="e.g. Fresno County Pharmacists Association" required>
             <span class="err"></span>
           </div>
@@ -272,7 +274,7 @@ const SIGNUP_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwcX2HF4N1__UFT
     const v = n => (form.elements[n].value || '').trim();
     const ok = [
       mark('full_name', !!v('full_name'), 'Enter your name.'),
-      mark('organization', !!v('organization'), 'Enter the group you represent.'),
+      mark('organization', !!v('organization'), 'Enter the organization you represent.'),
       mark('email', /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v('email')), 'Enter an email like name@example.com.')
     ].every(Boolean);
     if (!ok) { const first = form.querySelector('.bad input, .bad textarea'); if (first) first.focus(); return; }

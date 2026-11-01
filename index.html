@@ -582,7 +582,7 @@ footer .seal{display:block;margin-bottom:8px}
       document.querySelector('#st-vip small').textContent = 'of ' + d.vipLimit + ' VIP tables left';
       document.getElementById('vip-left').textContent = left;
       document.getElementById('vip-left').parentNode.lastChild.textContent = ' of ' + d.vipLimit + ' remaining';
-      document.getElementById('seats-left').textContent = d.seatsLeft > 0 ? Math.round(d.seatsLeft) + ' seats remaining in the room' : '';
+      document.getElementById('seats-left').textContent = (d.seatsLeft > 0 && d.seatsLeft < 50) ? Math.round(d.seatsLeft) + ' seats remaining in the room' : ''; // only show once it's getting scarce
       document.getElementById('vip-progress').hidden = false;
       requestAnimationFrame(() => { document.getElementById('vip-bar').style.width = Math.min(100, d.tables / d.vipLimit * 100) + '%'; });
     }
