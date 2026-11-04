@@ -124,6 +124,15 @@ footer a{color:var(--teal)}
 }
 @media (prefers-reduced-motion:reduce){.thirty{animation:none}}
 .ask .groups{margin-top:14px;font-size:.95em;letter-spacing:.06em;color:var(--teal,#8fd2d8)}
+.presented{display:grid;justify-items:center;gap:6px;margin:6px 0 4px}
+.presented > span{font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:var(--mist)}
+.presented img{height:46px;width:auto;display:block}
+.presented small{font-size:.8rem;color:var(--mist);letter-spacing:.04em}
+.presented-by{margin-top:28px;display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;border:1px solid var(--line);border-radius:8px;background:var(--night-2);padding:14px 20px;max-width:720px}
+.presented-by span{font-size:.72rem;letter-spacing:.26em;text-transform:uppercase;color:var(--mist)}
+.presented-by img{height:34px;width:auto;display:block}
+.presented-by em{margin-left:auto;font-family:var(--f-display);color:var(--teal)}
+@media (max-width:560px){.presented-by em{margin-left:0}}
 </style>
 </head>
 <body>
@@ -140,6 +149,7 @@ footer a{color:var(--teal)}
     <p class="anniv">Anniversary</p>
     <h1>California Pharmacists <em>Hall of Fame</em></h1>
     <div class="when"><span>Black Tie Celebration</span><span>April 23, 2027 · 6:30 pm</span><span>San Diego</span></div>
+    <div class="presented"><span>Presented by</span><img src="pcca-logo-white.png" alt="PCCA, Professional Compounding Centers of America" width="498" height="150"><small>Professional Compounding Centers of America</small></div>
     <a class="jump" href="#signup">Join the Host Committee ↓</a>
   </div>
 </header>
@@ -152,6 +162,7 @@ footer a{color:var(--teal)}
         <h2>Join the <em>30th Anniversary Host Committee.</em></h2>
         <p>We would like <strong>one member from a variety of pharmacy and pharmacist organizations</strong> to join the 30th Anniversary Host Committee and help us strategize, design, and develop <strong>the not-to-be-missed event of the year</strong>. Will you represent yours?</p>
         <p class="groups">Pharmacists · Technicians · Students · Academia · Research · and more</p>
+        <div class="presented-by"><span>Presenting Sponsor</span><img src="pcca-logo-white.png" alt="PCCA" width="498" height="150"><em>Thank you, PCCA, for making the 30th possible.</em></div>
       </div>
     </div>
   </section>
