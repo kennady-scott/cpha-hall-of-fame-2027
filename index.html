@@ -588,7 +588,13 @@ footer .seal{display:block;margin-bottom:8px}
     }
     // Supporters whose logo we have show it in place of their name.
     const LOGOS = [[/\bPCCA\b/, 'pcca-logo-white.png']];
-    const sup = d.supporters || {};
+    const sup = Object.assign({}, d.supporters || {});
+    const uniq = list => [...new Set(list)];
+    const all = key => sup[key] || [];
+    // Every $2,000+ gift includes a VIP table, so the VIP list shows every table holder, not just $2,000 sponsors.
+    sup.vip = uniq(['presenting', 'lifetime', 'host', 'gold', 'vip'].flatMap(all));
+    // Every donor is automatically on the Host Committee.
+    sup.host = uniq(['host', 'presenting', 'lifetime', 'gold', 'vip', 'silver', 'patron', 'student'].flatMap(all));
     const grid = document.getElementById('sup-grid');
     GROUPS.forEach(([key, label]) => {
       const names = sup[key] || [];
@@ -600,7 +606,8 @@ footer .seal{display:block;margin-bottom:8px}
       names.forEach(n => {
         const li = document.createElement('li');
         const logo = LOGOS.find(([re]) => re.test(n));
-        if (logo) {
+        if (logo && key !== 'presenting') li.textContent = (n.match(/\(([^)]+)\)$/) || [, n])[1]; // short name (e.g. PCCA) in the other lists
+        else if (logo) {
           const img = document.createElement('img');
           img.src = logo[1]; img.alt = n; img.className = 'sup-logo';
           li.appendChild(img);
