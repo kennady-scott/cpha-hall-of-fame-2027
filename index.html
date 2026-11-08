@@ -566,7 +566,7 @@ footer .seal{display:block;margin-bottom:8px}
 (function(){
   const STATS = 'https://script.google.com/macros/s/AKfycbwcX2HF4N1__UFTp5htjYkXsdY1hHWEL-z-VybhasKEexlpTLvyHfMy9MjCo-JswUAg/exec?stats=1';
   const GROUPS = [
-    ['presenting', 'Presenting Sponsor'], ['lifetime', 'Founding Members · Lifetime Patrons'], ['host', 'Host Committee'],
+    ['presenting', 'Presenting Sponsor'], ['lifetime', 'Founding Members · Lifetime Patrons'], ['host', 'Host Committee Sponsor'],
     ['gold', 'Gold'], ['vip', 'VIP Tables'], ['silver', 'Silver'], ['patron', 'Patrons of the Hall of Fame'], ['student', 'Student Sponsors']
   ];
   fetch(STATS).then(r => r.json()).then(d => {
@@ -593,8 +593,6 @@ footer .seal{display:block;margin-bottom:8px}
     const all = key => sup[key] || [];
     // Every $2,000+ gift includes a VIP table, so the VIP list shows every table holder, not just $2,000 sponsors.
     sup.vip = uniq(['presenting', 'lifetime', 'host', 'gold', 'vip'].flatMap(all));
-    // Every donor is automatically on the Host Committee.
-    sup.host = uniq(['host', 'presenting', 'lifetime', 'gold', 'vip', 'silver', 'patron', 'student'].flatMap(all));
     const grid = document.getElementById('sup-grid');
     GROUPS.forEach(([key, label]) => {
       const names = sup[key] || [];
