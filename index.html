@@ -590,6 +590,8 @@ footer .seal{display:block;margin-bottom:8px}
     const LOGOS = [[/\bPCCA\b/, 'pcca-logo-white.png']];
     const sup = Object.assign({}, d.supporters || {});
     const uniq = list => [...new Set(list)];
+    // Anonymous donors are thanked privately, not listed on the wall.
+    Object.keys(sup).forEach(k => { sup[k] = (sup[k] || []).filter(n => !/^\s*anonymous\b/i.test(n)); });
     const all = key => sup[key] || [];
     // Every $2,000+ gift includes a VIP table, so the VIP list shows every table holder, not just $2,000 sponsors.
     sup.vip = uniq(['presenting', 'lifetime', 'host', 'gold', 'vip'].flatMap(all));
