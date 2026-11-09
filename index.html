@@ -281,6 +281,7 @@ footer .seal{display:block;margin-bottom:8px}
   .thirty{animation:none}
   .btn,.tier{transition:none}
 }
+.ladder > .tier:last-child{grid-column:1 / -1}
 </style>
 </head>
 <body>
@@ -418,6 +419,13 @@ footer .seal{display:block;margin-bottom:8px}
           <div class="price">$5,000</div>
           <p>Stand behind the 30th Anniversary Host Committee, the members from every corner of CPhA bringing this celebration to life.</p>
           <a href="register.html#host">Become a Host Committee Sponsor</a>
+        </article>
+        <article class="tier feature">
+          <span class="kind">Only one available</span>
+          <h3>Student Squad Sponsor</h3>
+          <div class="price">$5,000</div>
+          <p>Sponsor the future leaders volunteering and greeting in the room that night, with Student Leader Tables so they can dine and learn about CPhA. Every squad member wears a badge carrying your name.</p>
+          <a href="register.html#squad">Become the Student Squad Sponsor</a>
         </article>
         <article class="tier feature">
           <span class="kind">Corporate or Family</span>
@@ -566,7 +574,7 @@ footer .seal{display:block;margin-bottom:8px}
 (function(){
   const STATS = 'https://script.google.com/macros/s/AKfycbwcX2HF4N1__UFTp5htjYkXsdY1hHWEL-z-VybhasKEexlpTLvyHfMy9MjCo-JswUAg/exec?stats=1';
   const GROUPS = [
-    ['presenting', 'Presenting Sponsor'], ['lifetime', 'Founding Members · Lifetime Patrons'], ['host', 'Host Committee Sponsor'],
+    ['presenting', 'Presenting Sponsor'], ['lifetime', 'Founding Members · Lifetime Patrons'], ['host', 'Host Committee Sponsor'], ['squad', 'Student Squad Sponsor'],
     ['gold', 'Gold'], ['vip', 'VIP Tables'], ['silver', 'Silver'], ['patron', 'Patrons of the Hall of Fame'], ['student', 'Student Sponsors']
   ];
   fetch(STATS).then(r => r.json()).then(d => {
@@ -594,7 +602,7 @@ footer .seal{display:block;margin-bottom:8px}
     Object.keys(sup).forEach(k => { sup[k] = (sup[k] || []).filter(n => !/^\s*anonymous\b/i.test(n)); });
     const all = key => sup[key] || [];
     // Every $2,000+ gift includes a VIP table, so the VIP list shows every table holder, not just $2,000 sponsors.
-    sup.vip = uniq(['presenting', 'lifetime', 'host', 'gold', 'vip'].flatMap(all));
+    sup.vip = uniq(['presenting', 'lifetime', 'host', 'squad', 'gold', 'vip'].flatMap(all));
     const grid = document.getElementById('sup-grid');
     GROUPS.forEach(([key, label]) => {
       const names = sup[key] || [];
