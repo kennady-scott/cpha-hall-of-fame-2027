@@ -231,6 +231,12 @@ footer a{color:var(--teal)}
             <input type="text" id="employer" name="employer">
           </div>
           <fieldset>
+            <legend>Are you a pharmacy student?</legend>
+            <div class="opts" style="grid-template-columns:1fr">
+              <label class="opt"><input type="checkbox" id="student" name="student" value="Yes">Yes, I’m a pharmacy student. Count me in for the Student Squad, too.</label>
+            </div>
+          </fieldset>
+          <fieldset>
             <legend>Where would you like to help? <i>(check any)</i></legend>
             <div class="opts">
               <label class="opt"><input type="checkbox" name="help" value="Strategy & planning">Strategy &amp; planning</label>
@@ -294,6 +300,7 @@ const SIGNUP_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwcX2HF4N1__UFT
     const data = new URLSearchParams();
     ['full_name','organization','role','email','phone','city','employer','notes'].forEach(n => data.append(n, v(n)));
     data.append('help', [...form.querySelectorAll('input[name=help]:checked')].map(c => c.value).join(', '));
+    data.append('student', document.getElementById('student').checked ? 'Yes' : '');
     data.append('submitted_from', location.href);
 
     if (!SIGNUP_ENDPOINT) {
